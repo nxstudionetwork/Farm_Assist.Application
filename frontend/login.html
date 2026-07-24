@@ -17,14 +17,14 @@
     .auth-header h1{color:#fff;font-size:22px;font-weight:700;margin:0 0 4px;letter-spacing:-.3px}
     .auth-header p{color:rgba(255,255,255,.7);font-size:13px;margin:0;font-weight:400}
     .auth-body{padding:24px 24px 32px;flex:1}
-    .step{display:none}.step.active{display:block;animation:fadeUp .3s ease}
+    .auth-tabs{display:flex;background:#f3f7f2;border-radius:12px;padding:4px;margin-bottom:28px;gap:4px}
+    .auth-tab{flex:1;border:none;background:transparent;padding:10px 0;border-radius:9px;font-size:12px;font-weight:600;color:#7a8f7a;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit}
+    .auth-tab i{font-size:13px}
+    .auth-tab.active{background:#fff;color:#1a3c2a;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .auth-tab:hover:not(.active){color:#2d5a3e}
+    .auth-form{display:none}
+    .auth-form.active{display:block;animation:fadeUp .3s ease}
     @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .step h2{font-size:17px;color:#1a3c2a;margin:0 0 6px;display:flex;align-items:center;gap:8px}
-    .step .sub{font-size:12px;color:#7a8f7a;margin:0 0 20px;line-height:1.5}
-    .progress-track{display:flex;justify-content:center;gap:6px;margin-bottom:24px}
-    .progress-dot{width:8px;height:8px;border-radius:50%;background:#e0e8e0;transition:all .3s}
-    .progress-dot.active{background:#4caf50;width:24px;border-radius:4px}
-    .progress-dot.done{background:#2e7d32}
     .form-group{margin-bottom:18px}
     .form-group label{display:block;font-size:13px;font-weight:600;color:#2d3e2d;margin-bottom:6px}
     .input-wrap{position:relative}
@@ -32,32 +32,44 @@
     .input-wrap input{width:100%;padding:13px 14px 13px 42px;border:1.5px solid #e0e8e0;border-radius:12px;font-size:14px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;box-sizing:border-box;font-family:inherit}
     .input-wrap input:focus{outline:none;border-color:#4caf50;background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
     .input-wrap input::placeholder{color:#a0b8a0}
+    .pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#7a9f7a;font-size:15px;cursor:pointer;left:auto}
+    .pwd-toggle:hover{color:#2e7d32}
+    .form-options{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:22px}
+    .form-options label{display:flex;align-items:center;gap:7px;color:#4a5f4a;cursor:pointer;font-weight:400}
+    .form-options label input[type="checkbox"]{width:16px;height:16px;accent-color:#4caf50;border-radius:4px;cursor:pointer}
+    .form-options a{color:#2e7d32;text-decoration:none;font-weight:600}
+    .form-options a:hover{text-decoration:underline}
     .btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#1a3c2a,#2d5a3e);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s ease;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
     .btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,60,42,.25)}
     .btn-submit:active{transform:translateY(0)}
     .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .btn-ghost{width:100%;padding:12px;background:#f3f7f2;color:#3a5a3a;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
-    .btn-ghost:hover{background:#e6efe6}
-    .otp-grid{display:flex;justify-content:center;gap:10px;margin:16px 0}
-    .otp-grid input{width:48px;height:52px;text-align:center;font-size:20px;font-weight:700;border:1.5px solid #e0e8e0;border-radius:12px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;font-family:inherit}
-    .otp-grid input:focus{outline:none;border-color:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.1);background:#fff}
     .pin-grid{display:flex;justify-content:center;gap:12px;margin:20px 0}
     .pin-grid input{width:52px;height:58px;text-align:center;font-size:22px;font-weight:700;border:1.5px solid #e0e8e0;border-radius:12px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;font-family:inherit}
     .pin-grid input:focus{outline:none;border-color:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.1);background:#fff}
-    .hint{text-align:center;font-size:12px;color:#8a9f8a;margin-bottom:20px}
-    .hint strong{color:#2e7d32}
+    .pin-hint{text-align:center;font-size:12px;color:#8a9f8a;margin-bottom:20px}
+    .pin-hint strong{color:#2e7d32}
+    .bio-options{display:flex;justify-content:center;gap:20px;margin:24px 0}
+    .bio-btn{width:80px;height:80px;border-radius:20px;border:2px dashed #d0dfd0;background:#f7faf7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .25s ease;font-family:inherit}
+    .bio-btn i{font-size:32px;color:#4caf50}
+    .bio-btn span{font-size:11px;color:#5a7a5a;font-weight:600}
+    .bio-btn:hover{border-color:#4caf50;background:#f0f8f0;transform:translateY(-3px);box-shadow:0 8px 20px rgba(76,175,80,.12)}
+    .bio-btn.scanning{border-color:#ff9800;animation:pulse 1s infinite}
+    .bio-btn.verified{border-color:#4caf50;border-style:solid;background:#e8f5e9}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,152,0,.3)}50%{box-shadow:0 0 0 12px rgba(255,152,0,0)}}
+    .otp-section{display:none}
+    .otp-section.show{display:block;animation:fadeUp .3s ease}
+    .otp-grid{display:flex;justify-content:center;gap:10px;margin:16px 0}
+    .otp-grid input{width:48px;height:52px;text-align:center;font-size:20px;font-weight:700;border:1.5px solid #e0e8e0;border-radius:12px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;font-family:inherit}
+    .otp-grid input:focus{outline:none;border-color:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.1);background:#fff}
     .auth-divider{display:flex;align-items:center;gap:12px;margin:24px 0 16px}
     .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:#e8efe8}
     .auth-divider span{font-size:12px;color:#8a9f8a;white-space:nowrap}
     .auth-footer{display:flex;gap:10px}
     .auth-footer .btn-outline{flex:1;padding:12px;border:1.5px solid #e0e8e0;border-radius:12px;background:transparent;font-size:13px;font-weight:600;color:#3a5a3a;cursor:pointer;transition:all .2s ease;font-family:inherit;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
     .auth-footer .btn-outline:hover{border-color:#4caf50;background:#f5faf5}
-    .back-link{text-align:center;margin-top:16px;font-size:13px;color:#6a806a}
-    .back-link a{color:#2e7d32;font-weight:600;text-decoration:none}
     .success-toast,.danger-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:2000;animation:fadeUp .3s ease;display:flex;align-items:center;gap:10px}
     .success-toast{background:#1a3c2a}.success-toast i{color:#81c784}
     .danger-toast{background:#c62828}
-    .otp-section{display:none}.otp-section.show{display:block;animation:fadeUp .3s ease}
   </style>
 </head>
 <body>
@@ -68,57 +80,61 @@
       <p>India's Agriculture Super App</p>
     </div>
     <div class="auth-body">
-      <div class="progress-track">
-        <div class="progress-dot active" id="pd-1"></div>
-        <div class="progress-dot" id="pd-2"></div>
-        <div class="progress-dot" id="pd-3"></div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="pin" onclick="switchTab('pin')"><i class="fas fa-hashtag"></i> PIN</button>
+        <button class="auth-tab" data-tab="bio" onclick="switchTab('bio')"><i class="fas fa-fingerprint"></i> Bio</button>
+        <button class="auth-tab" data-tab="otp" onclick="switchTab('otp')"><i class="fas fa-mobile-screen"></i> OTP</button>
       </div>
 
-      <!-- Step 1: Enter Mobile / Farmer ID -->
-      <div class="step active" id="login-step-1">
-        <h2><i class="fas fa-mobile-screen" style="color:#4caf50;"></i> Welcome Back</h2>
-        <p class="sub">Enter your mobile number or Farmer ID to continue.</p>
-        <div class="form-group">
-          <label>Mobile Number / Farmer ID</label>
-          <div class="input-wrap">
-            <i class="fas fa-phone"></i>
-            <input type="text" id="login-identifier" placeholder="e.g. +91 98765 43210 or FA-XX-XXXXXX" autofocus>
-          </div>
-        </div>
-        <button class="btn-submit" onclick="sendLoginOtp()">Continue <i class="fas fa-arrow-right"></i></button>
-        <p class="hint">We'll send a verification code to your phone</p>
-      </div>
-
-      <!-- Step 2: Verify OTP -->
-      <div class="step" id="login-step-2">
-        <h2><i class="fas fa-shield-halved" style="color:#FF9800;"></i> Verify OTP</h2>
-        <p class="sub">Enter the 6-digit code sent to your phone.<br>Use <strong>123456</strong> for demo.</p>
-        <div class="otp-grid">
-          <input type="text" maxlength="1" id="otp-1" oninput="focusNext('otp-1','otp-2')">
-          <input type="text" maxlength="1" id="otp-2" oninput="focusNext('otp-2','otp-3')">
-          <input type="text" maxlength="1" id="otp-3" oninput="focusNext('otp-3','otp-4')">
-          <input type="text" maxlength="1" id="otp-4" oninput="focusNext('otp-4','otp-5')">
-          <input type="text" maxlength="1" id="otp-5" oninput="focusNext('otp-5','otp-6')">
-          <input type="text" maxlength="1" id="otp-6" oninput="focusNext('otp-6',null);verifyOtp()">
-        </div>
-        <button class="btn-submit" onclick="verifyOtp()">Verify <i class="fas fa-check"></i></button>
-        <button class="btn-ghost" onclick="resendOtp()"><i class="fas fa-rotate-right"></i> Resend OTP</button>
-        <p style="text-align:center;margin-top:12px;"><a href="#" onclick="goStep(1);return false;" style="color:#2e7d32;font-size:13px;font-weight:600;">← Change number</a></p>
-      </div>
-
-      <!-- Step 3: Enter PIN -->
-      <div class="step" id="login-step-3">
-        <h2><i class="fas fa-lock" style="color:#4caf50;"></i> Enter PIN</h2>
-        <p class="sub">Enter your 4-digit PIN to complete login.</p>
+      <!-- PIN Login -->
+      <div class="auth-form active" id="form-pin">
+        <p style="text-align:center;font-size:13px;color:#5a7a5a;margin-bottom:16px;">Enter your 4-digit quick PIN</p>
         <div class="pin-grid">
-          <input type="password" maxlength="1" id="pin-1" oninput="focusNext('pin-1','pin-2')">
+          <input type="password" maxlength="1" id="pin-1" oninput="focusNext('pin-1','pin-2')" autofocus>
           <input type="password" maxlength="1" id="pin-2" oninput="focusNext('pin-2','pin-3')">
           <input type="password" maxlength="1" id="pin-3" oninput="focusNext('pin-3','pin-4')">
-          <input type="password" maxlength="1" id="pin-4" oninput="focusNext('pin-4',null);verifyPin()">
+          <input type="password" maxlength="1" id="pin-4" oninput="focusNext('pin-4',null); checkPinLogin()">
         </div>
-        <p class="hint">Demo PIN: <strong>1234</strong></p>
-        <button class="btn-submit" onclick="verifyPin()">Login <i class="fas fa-arrow-right"></i></button>
-        <p style="text-align:center;margin-top:12px;"><a href="forgot.html" style="color:#2e7d32;font-size:13px;font-weight:600;">Forgot PIN?</a></p>
+        <p class="pin-hint">Demo PIN: <strong>1234</strong></p>
+        <button class="btn-submit" onclick="handlePinLogin()">Log In with PIN</button>
+        <p style="text-align:center;margin-top:14px;"><a href="forgot.html" style="color:#2e7d32;font-size:13px;font-weight:600;text-decoration:none;">Forgot PIN?</a></p>
+      </div>
+
+      <!-- Biometric Login -->
+      <div class="auth-form" id="form-bio">
+        <p style="text-align:center;font-size:13px;color:#5a7a5a;margin-bottom:4px;">Choose authentication method</p>
+        <div class="bio-options">
+          <button class="bio-btn" onclick="startBiometric('fingerprint')">
+            <i class="fas fa-fingerprint"></i>
+            <span>Fingerprint</span>
+          </button>
+          <button class="bio-btn" onclick="startBiometric('face')">
+            <i class="fas fa-face-smile"></i>
+            <span>Face ID</span>
+          </button>
+        </div>
+        <p style="text-align:center;font-size:11px;color:#8a9f8a;">Tap to simulate biometric authentication</p>
+      </div>
+
+      <!-- OTP Login -->
+      <div class="auth-form" id="form-otp">
+        <p style="text-align:center;font-size:13px;color:#5a7a5a;margin-bottom:16px;">Get a one-time password on your phone</p>
+        <div class="form-group">
+          <div class="input-wrap">
+            <i class="fas fa-phone"></i>
+            <input type="text" id="otp-phone" placeholder="+91 98765 43210" value="+91 98765 43210">
+          </div>
+        </div>
+        <button type="button" class="btn-submit" onclick="sendOtp()" id="send-otp-btn">Send OTP <i class="fas fa-paper-plane"></i></button>
+        <div class="otp-section" id="otp-section">
+          <p class="pin-hint" style="margin-top:16px;">Enter the 4-digit code (use <strong>1234</strong>)</p>
+          <div class="otp-grid">
+            <input type="text" maxlength="1" id="otp-1" oninput="focusNext('otp-1','otp-2')">
+            <input type="text" maxlength="1" id="otp-2" oninput="focusNext('otp-2','otp-3')">
+            <input type="text" maxlength="1" id="otp-3" oninput="focusNext('otp-3','otp-4')">
+            <input type="text" maxlength="1" id="otp-4" oninput="focusNext('otp-4',null); checkOtpLogin()">
+          </div>
+        </div>
       </div>
 
       <div class="auth-divider"><span>New to Farm Assist?</span></div>
@@ -134,11 +150,9 @@
   <script src="js/userStore.js"></script>
   <script src="assets/js/app.js"></script>
   <script>
-    var loginIdentifier = '';
-
     function showToast(msg, type) {
-      var ex = document.querySelector('.success-toast, .danger-toast');
-      if (ex) ex.remove();
+      var existing = document.querySelector('.success-toast, .danger-toast');
+      if (existing) existing.remove();
       var t = document.createElement('div');
       t.className = type === 'danger' ? 'danger-toast' : 'success-toast';
       t.innerHTML = '<i class="fas fa-' + (type === 'danger' ? 'exclamation-circle' : 'check-circle') + '"></i> ' + msg;
@@ -146,94 +160,119 @@
       setTimeout(function(){ t.remove(); }, 3000);
     }
 
-    function goStep(n) {
-      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-      document.getElementById('login-step-' + n).classList.add('active');
-      for (var i = 1; i <= 3; i++) {
-        var dot = document.getElementById('pd-' + i);
-        dot.classList.remove('active', 'done');
-        if (i === n) dot.classList.add('active');
-        else if (i < n) dot.classList.add('done');
-      }
-      if (n === 1) document.getElementById('login-identifier').focus();
-      if (n === 2) setTimeout(function(){ document.getElementById('otp-1').focus(); }, 300);
-      if (n === 3) setTimeout(function(){ document.getElementById('pin-1').focus(); }, 300);
+    function switchTab(mode) {
+      document.querySelectorAll('.auth-form').forEach(function(f){ f.classList.remove('active'); });
+      document.getElementById('form-' + mode).classList.add('active');
+      document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelector('.auth-tab[data-tab="' + mode + '"]').classList.add('active');
     }
 
-    function focusNext(cur, next) {
-      var el = document.getElementById(cur);
-      if (el.value.length === 1 && next) document.getElementById(next).focus();
-    }
-
-    function sendLoginOtp() {
-      loginIdentifier = document.getElementById('login-identifier').value.trim();
-      if (!loginIdentifier) { showToast('Please enter your mobile number or Farmer ID', 'danger'); return; }
-      showToast('OTP sent! Use 123456 for demo', 'success');
-      goStep(2);
-    }
-
-    function resendOtp() {
-      showToast('OTP resent to your phone', 'success');
-    }
-
-    function verifyOtp() {
-      var otp = '';
-      for (var i = 1; i <= 6; i++) { var el = document.getElementById('otp-' + i); if (el) otp += el.value; }
-      if (otp === '123456') {
-        showToast('OTP verified!', 'success');
-        goStep(3);
-      } else if (otp.length === 6) {
-        showToast('Incorrect OTP. Use 123456.', 'danger');
-        for (var i = 1; i <= 6; i++) { var el = document.getElementById('otp-' + i); if (el) el.value = ''; }
-        document.getElementById('otp-1').focus();
+    function focusNext(currentId, nextId) {
+      var el = document.getElementById(currentId);
+      if (el.value.length === 1 && nextId) {
+        document.getElementById(nextId).focus();
       }
     }
 
-    function verifyPin() {
+    function setLoggedIn(name, mode) {
+      localStorage.setItem('user-session-mode', mode);
+      localStorage.setItem('session-last-activity', Date.now().toString());
+    }
+
+    function loginMostRecentOrGuest(mode) {
+      if (window.UserStore) {
+        var users = UserStore.KEYS ? JSON.parse(localStorage.getItem(UserStore.KEYS.users) || '[]') : [];
+        if (users.length) {
+          UserStore.setSession(users[users.length - 1]);
+          setLoggedIn(users[users.length - 1].fullName, mode);
+          return true;
+        }
+      }
+      showToast('No account found. Please sign up first.', 'danger');
+      setTimeout(function () { window.location.href = 'signup.html'; }, 900);
+      return false;
+    }
+
+    function handlePinLogin() {
       var pin = '';
-      for (var i = 1; i <= 4; i++) { var el = document.getElementById('pin-' + i); if (el) pin += el.value; }
-      var storedPin = localStorage.getItem('fa-user-pin') || '1234';
-      if (pin === storedPin || pin === '1234') {
-        doLogin();
-      } else if (pin.length === 4) {
+      for (var i = 1; i <= 4; i++) pin += document.getElementById('pin-' + i).value;
+      if (pin === '1234') {
+        if (!loginMostRecentOrGuest('pin')) return;
+        showToast('Login successful!', 'success');
+        setTimeout(function(){ window.location.href = 'index.html'; }, 600);
+      } else {
         showToast('Incorrect PIN. Try 1234.', 'danger');
-        for (var i = 1; i <= 4; i++) { var el = document.getElementById('pin-' + i); if (el) el.value = ''; }
+        for (var i = 1; i <= 4; i++) document.getElementById('pin-' + i).value = '';
         document.getElementById('pin-1').focus();
       }
     }
 
-    function doLogin() {
-      if (window.UserStore) {
-        var res = UserStore.login(loginIdentifier);
-        if (res.ok) {
-          localStorage.setItem('user-session-mode', 'pin');
-          localStorage.setItem('session-last-activity', Date.now().toString());
-          showToast('Welcome back, ' + res.user.fullName + '!', 'success');
+    function checkPinLogin() {
+      var pin = '';
+      for (var i = 1; i <= 4; i++) pin += document.getElementById('pin-' + i).value;
+      if (pin.length === 4) { handlePinLogin(); }
+    }
+
+    var bioScanning = false;
+    function startBiometric(type) {
+      if (bioScanning) return;
+      bioScanning = true;
+      var btns = document.querySelectorAll('.bio-btn');
+      btns.forEach(function(b){ b.classList.add('scanning'); });
+      showToast('Scanning ' + (type === 'face' ? 'Face ID' : 'Fingerprint') + '...', 'success');
+      setTimeout(function(){
+        btns.forEach(function(b){
+          b.classList.remove('scanning');
+          b.classList.add('verified');
+        });
+        showToast('Biometric verified!', 'success');
+        setTimeout(function(){
+          if (!loginMostRecentOrGuest('biometric')) return;
+          window.location.href = 'index.html';
+        }, 600);
+      }, 2000);
+    }
+
+    function sendOtp() {
+      var phone = document.getElementById('otp-phone').value;
+      if (!phone) { showToast('Enter a mobile number', 'danger'); return; }
+      document.getElementById('otp-section').classList.add('show');
+      document.getElementById('send-otp-btn').disabled = true;
+      document.getElementById('send-otp-btn').innerHTML = 'OTP Sent <i class="fas fa-check"></i>';
+      showToast('OTP sent to ' + phone + ' (Use 1234)', 'success');
+      setTimeout(function(){ document.getElementById('otp-1').focus(); }, 300);
+    }
+
+    function checkOtpLogin() {
+      var otp = '';
+      for (var i = 1; i <= 4; i++) otp += document.getElementById('otp-' + i).value;
+      if (otp.length === 4) {
+        if (otp === '1234') {
+          if (!loginMostRecentOrGuest('otp')) return;
+          showToast('OTP verified! Logging in...', 'success');
           setTimeout(function(){ window.location.href = 'index.html'; }, 600);
-          return;
+        } else {
+          showToast('Incorrect OTP. Try 1234.', 'danger');
+          for (var i = 1; i <= 4; i++) document.getElementById('otp-' + i).value = '';
+          document.getElementById('otp-1').focus();
         }
       }
-      localStorage.setItem('user-logged-in', 'true');
-      localStorage.setItem('user-session-mode', 'pin');
-      localStorage.setItem('session-last-activity', Date.now().toString());
-      localStorage.setItem('user-name', loginIdentifier);
-      showToast('Login successful!', 'success');
-      setTimeout(function(){ window.location.href = 'index.html'; }, 600);
     }
 
     function enterAsGuest() {
       if (window.UserStore) {
         UserStore.register({ fullName: 'Guest Farmer', role: 'farmer', farmName: 'Demo Farm' });
-        var users = JSON.parse(localStorage.getItem(UserStore.KEYS.users) || '[]');
-        if (users.length) UserStore.setSession(users[users.length - 1]);
+        var us = JSON.parse(localStorage.getItem(UserStore.KEYS.users) || '[]');
+        if (us.length) UserStore.setSession(us[us.length - 1]);
       }
-      localStorage.setItem('user-logged-in', 'true');
-      localStorage.setItem('user-session-mode', 'guest');
-      showToast('Entering as Guest...', 'success');
+      setLoggedIn('Guest Farmer', 'guest');
+      showToast('Accessing dashboard in Guest Mode...', 'success');
       setTimeout(function(){ window.location.href = 'index.html'; }, 800);
     }
 
-    if (typeof FarmDB !== 'undefined' && FarmDB.app && FarmDB.app.init) { FarmDB.app.init(); }
+    if (typeof FarmDB !== 'undefined' && FarmDB.app && FarmDB.app.init) {
+      FarmDB.app.init();
+    }
   </script>
 </body>
 </html>

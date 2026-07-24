@@ -58,7 +58,7 @@ const STATIC_ASSETS = [
 ];
 
 const CDN_ASSETS = [
-  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 ];
 
 const ALL_ASSETS = ["/", ...HTML_ASSETS, ...STATIC_ASSETS, ...CDN_ASSETS];
