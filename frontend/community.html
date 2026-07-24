@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Community</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Community</span>
+    </nav>
+
+    <div class="category-slider">
+      <button class="category-chip active" onclick="showToast('Filtered: Global Feed','info')">Global Feed</button>
+      <button class="category-chip" onclick="showToast('Filtered: Paddy Farmers circle','info')">Paddy Growers</button>
+      <button class="category-chip" onclick="showToast('Filtered: Dairy Cooperatives circle','info')">Dairy Circles</button>
+      <button class="category-chip" onclick="showToast('Filtered: Organic Hub','info')">Organic Hub</button>
+      <button class="category-chip" onclick="showToast('Filtered: Agritech Innovations Group','info')">Tech Talk</button>
+    </div>
+
+    <section class="card-premium" style="padding:15px 12px;">
+      <h2 style="font-size:18px; margin-left:12px; margin-bottom:15px;"><i class="fas fa-comments" style="color:var(--premium-green); margin-right:8px;"></i> Community</h2>
+
+      <div style="background:var(--light-gray); border-radius:18px; padding:12px; margin-bottom:20px; display:flex; gap:10px; align-items:center;">
+        <input type="text" id="post-input" placeholder="Share farm updates, ask questions..." class="form-input" style="padding:10px 14px; font-size:12px;">
+        <button class="btn-primary" style="padding:10px 16px; border-radius:12px; font-size:12px;" onclick="createPost()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+
+      <div id="community-feed-container" class="community-feed"></div>
+    </section>
+
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-trophy" style="color:var(--warning); margin-right:8px;"></i> Krishi Leaderboard</h2>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Top contributors this month, offering peer support & guides.</p>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div style="width:30px; height:30px; border-radius:50%; background:var(--warning); color:var(--white); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;">1</div>
+          <div>
+            <div class="price-crop">Gurbachan Singh</div>
+            <div style="font-size:9px; color:var(--text-muted);">Punjab • 142 helpful answers</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop" style="color:var(--premium-green);">+12,450 XP</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div style="width:30px; height:30px; border-radius:50%; background:var(--premium-gray); color:var(--white); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;">2</div>
+          <div>
+            <div class="price-crop">Meera Nair</div>
+            <div style="font-size:9px; color:var(--text-muted);">Kerala • 98 helpful answers</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop" style="color:var(--premium-green);">+9,800 XP</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Market Prices</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+    <div class="page-header">
+      <div><h1>Live Market Prices</h1><p>Mandi prices, MSP, trends & demand forecasts</p></div>
+      <button class="btn-primary btn-sm" onclick="showToast('Setting price alerts for your crops!','success')"><i class="fas fa-bell"></i> Set Alert</button>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="showMarketTab('prices',this)">All Prices</button>
+      <button class="filter-tab" onclick="showMarketTab('msp',this)">MSP 2026</button>
+      <button class="filter-tab" onclick="showMarketTab('trends',this)">Trends</button>
+    </div>
+    <div id="prices-content"></div>
+    <div id="market-msp-content" style="display:none;">
+      <div class="card-premium">
+        <h3 style="font-size:15px;margin-bottom:12px;"><i class="fas fa-landmark"></i> Minimum Support Price (MSP) 2026</h3>
+        <div class="responsive-table"><table><thead><tr><th>Crop</th><th>MSP (₹/qtl)</th><th>Increase</th></tr></thead><tbody>
+          <tr><td>Paddy (Common)</td><td>₹2,300</td><td style="color:var(--success);">+5.2%</td></tr>
+          <tr><td>Paddy (Grade A)</td><td>₹2,350</td><td style="color:var(--success);">+5.3%</td></tr>
+          <tr><td>Cotton (Medium)</td><td>₹7,100</td><td style="color:var(--success);">+6.5%</td></tr>
+          <tr><td>Cotton (Long)</td><td>₹7,520</td><td style="color:var(--success);">+6.5%</td></tr>
+          <tr><td>Maize</td><td>₹2,100</td><td style="color:var(--success);">+4.3%</td></tr>
+          <tr><td>Wheat</td><td>₹2,275</td><td style="color:var(--success);">+3.5%</td></tr>
+          <tr><td>Sugarcane</td><td>₹340/ton</td><td style="color:var(--success);">+4.0%</td></tr>
+          <tr><td>Groundnut</td><td>₹5,700</td><td style="color:var(--success);">+7.1%</td></tr>
+          <tr><td>Mustard</td><td>₹5,650</td><td style="color:var(--success);">+6.8%</td></tr>
+          <tr><td>Pulses (Toor)</td><td>₹7,300</td><td style="color:var(--success);">+8.2%</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+    <div id="market-trends-content" style="display:none;">
+      <div class="card-premium">
+        <h3 style="font-size:15px;margin-bottom:12px;"><i class="fas fa-chart-line"></i> Market Trends & Forecast</h3>
+        <div class="alert-strip info"><div class="alert-content"><i class="fas fa-arrow-up" style="color:var(--success);"></i><div><strong>Rice prices trending up</strong><div style="font-size:10px;color:var(--text-muted);">Export demand driving 5% increase expected next month</div></div></div></div>
+        <div class="alert-strip info"><div class="alert-content"><i class="fas fa-arrow-down" style="color:var(--danger);"></i><div><strong>Onion prices may soften</strong><div style="font-size:10px;color:var(--text-muted);">Kharif arrivals expected to increase supply by 20%</div></div></div></div>
+        <div class="alert-strip info"><div class="alert-content"><i class="fas fa-minus" style="color:var(--text-muted);"></i><div><strong>Cotton stable</strong><div style="font-size:10px;color:var(--text-muted);">Mill demand steady, prices expected in current range</div></div></div></div>
+        <div style="margin-top:12px;"><div data-chart="line" data-values="[60,70,55,75,80,72,85,78,82,88,85,92]" data-labels='["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]' style="height:160px;"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    function showMarketTab(tab, btn) {
+      ['prices-content','market-msp-content','market-trends-content'].forEach(function(id) { document.getElementById(id).style.display = 'none'; });
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      if (tab === 'prices') { document.getElementById('prices-content').style.display = 'block'; initMarketPrices('prices-content'); }
+      if (tab === 'msp') document.getElementById('market-msp-content').style.display = 'block';
+      if (tab === 'trends') { document.getElementById('market-trends-content').style.display = 'block'; setTimeout(function() { initAnalyticsCharts(); }, 200); }
+    }
+    setTimeout(function() { showMarketTab('prices', document.querySelector('.filter-tab')); }, 200);
+  </script>
+</body>
+</html>

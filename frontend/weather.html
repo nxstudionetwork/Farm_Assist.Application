@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Weather Forecast</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Weather</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1><i class="fas fa-cloud-sun"></i> Weather Forecast</h1>
+    </div>
+
+    <!-- Current Weather Overview -->
+    <section class="card-premium weather-widget" style="margin-bottom:20px; animation: none;">
+      <div class="weather-widget-header">
+        <h2 style="color:var(--white); font-size:18px;">Pune District Weather</h2>
+        <span style="font-size:12px; opacity:0.8;">Updated 5m ago</span>
+      </div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <i class="fas fa-cloud-sun-rain" style="font-size:48px;"></i>
+          <div>
+            <div class="weather-temp" style="font-size:42px;">28°C</div>
+            <div style="font-size:14px; font-weight:600; opacity:0.9;">Scattered Thunderstorms</div>
+          </div>
+        </div>
+        <div class="weather-details" style="font-size:12px; gap:4px;">
+          <span><i class="fas fa-tint"></i> Humidity: 65%</span>
+          <span><i class="fas fa-umbrella"></i> Rain Chance: 20%</span>
+          <span><i class="fas fa-wind"></i> Wind: 12 km/h</span>
+          <span><i class="fas fa-sun"></i> UV Index: 5 (Moderate)</span>
+        </div>
+      </div>
+      
+      <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:12px; font-size:13px; opacity:0.9;">
+        <i class="fas fa-info-circle"></i> <strong>Climate Advice:</strong> Evaporation index is moderate. Maintain moisture buffer on Plot B.
+      </div>
+    </section>
+
+    <!-- Weather Alerts -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-exclamation-triangle" style="color:var(--danger); margin-right:8px;"></i> Weather Alerts</h3>
+      <div class="alert-strip warning" style="border-left-color: var(--warning);">
+        <div class="alert-content">
+          <i class="fas fa-cloud-rain" style="color:var(--warning); margin-right:8px;"></i>
+          <div>
+            <strong>Heavy Rainfall Warning</strong>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Valid until tomorrow 18:00 • 80-100mm expected</div>
+          </div>
+        </div>
+        <span class="alert-time">Active</span>
+      </div>
+      <div class="alert-strip info" style="border-left-color: var(--premium-green);">
+        <div class="alert-content">
+          <i class="fas fa-temperature-high" style="color:var(--premium-green); margin-right:8px;"></i>
+          <div>
+            <strong>Heat Wave Advisory</strong>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Next week Mon-Wed • Temperatures up to 38°C</div>
+          </div>
+        </div>
+        <span class="alert-time">Upcoming</span>
+      </div>
+    </section>
+
+    <!-- Hourly Forecast -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-clock" style="color:var(--premium-green); margin-right:8px;"></i> Hourly Forecast</h3>
+      <div id="weather-hourly-list" class="weather-hourly">
+        <!-- Loaded via JS -->
+      </div>
+    </section>
+
+    <!-- 7-Day Forecast -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-calendar-alt" style="color:var(--premium-green); margin-right:8px;"></i> 7-Day Forecast</h3>
+      
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(31,122,76,0.1); color:var(--premium-green);"><i class="fas fa-cloud-sun-rain"></i></div>
+          <div>
+            <div class="price-crop">Thursday (Tomorrow)</div>
+            <div style="font-size:9px; color:var(--text-muted);">Isolated Rain</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">29°C / 22°C</div>
+          <div style="font-size:11px; color:var(--text-secondary);">45% Precipitation</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(31,122,76,0.1); color:var(--premium-green);"><i class="fas fa-cloud-showers-heavy"></i></div>
+          <div>
+            <div class="price-crop">Friday</div>
+            <div style="font-size:9px; color:var(--text-muted);">Heavy Thunderstorms</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">26°C / 20°C</div>
+          <div style="font-size:11px; color:var(--danger);">80% Precipitation</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(31,122,76,0.1); color:var(--premium-green);"><i class="fas fa-cloud"></i></div>
+          <div>
+            <div class="price-crop">Saturday</div>
+            <div style="font-size:9px; color:var(--text-muted);">Mostly Cloudy</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">28°C / 21°C</div>
+          <div style="font-size:11px; color:var(--text-secondary);">10% Precipitation</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(31,122,76,0.1); color:var(--premium-green);"><i class="fas fa-sun"></i></div>
+          <div>
+            <div class="price-crop">Sunday</div>
+            <div style="font-size:9px; color:var(--text-muted);">Bright Sunshine</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">31°C / 23°C</div>
+          <div style="font-size:11px; color:var(--success);">0% Precipitation</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agricultural Weather Advisory -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-leaf" style="color:var(--premium-green); margin-right:8px;"></i> Agricultural Advisory</h3>
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+        <p><i class="fas fa-check-circle" style="color:var(--success);"></i> <strong>Irrigation:</strong> Reduce watering for next 48 hours due to expected rainfall.</p>
+        <p><i class="fas fa-check-circle" style="color:var(--success);"></i> <strong>Pesticide:</strong> Avoid spraying today — rain will wash away application.</p>
+        <p><i class="fas fa-check-circle" style="color:var(--success);"></i> <strong>Harvest:</strong> Complete soybean harvest before Friday's heavy rain arrives.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

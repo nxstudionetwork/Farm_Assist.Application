@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Agriculture Super App</title>
+  <meta name="description" content="Premium mobile-first Progressive Web Application for intelligent agriculture, farm management, AI crop advice, marketplace, and smart satellite monitoring.">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B3D2E">
+
+  <!-- FontAwesome 6.5.0 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <!-- Hero Dashboard Greeting -->
+    <section class="hero-dashboard">
+      <div class="hero-header">
+        <div class="hero-welcome">
+          <p>Welcome back,</p>
+          <h2 id="farmer-name-display" data-user="fullName">Farmer</h2>
+          <p>Farm: <span data-user-farm="name">My Farm</span> • <span data-user="village" data-user-empty="Your Village">Your Village</span></p>
+        </div>
+
+        <!-- Gamified Streaks & Score Ring -->
+        <div style="display:flex; gap:15px; align-items:center;">
+          <div style="text-align:right; color:white;">
+            <div style="font-size:12px; font-weight:700;"><i class="fas fa-fire" style="color:#ffeb3b;"></i> 14 Day Streak</div>
+            <div style="font-size:8px; opacity:0.8;">Daily Log Streak</div>
+          </div>
+          <div class="health-score-container" onclick="window.location.href='profile.html'">
+            <div class="health-ring">
+              <svg>
+                <circle class="bg" cx="22" cy="22" r="20"></circle>
+                <circle class="progress" cx="22" cy="22" r="20" style="stroke-dashoffset: calc(125.6 - (125.6 * 89) / 100);"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="health-score-text">89%</div>
+              <div style="font-size: 9px; opacity:0.8;">Farm Health</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily AI Briefing Bar -->
+      <div style="background:rgba(255,255,255,0.15); border-radius:12px; padding:10px 15px; font-size:12px; color:white; display:flex; align-items:center; gap:10px; margin-top:15px;">
+        <i class="fas fa-robot"></i>
+        <span><strong>Daily AI Briefing:</strong> Heavy rainfall predicted tomorrow. Empty storage plots, delay crop watering, and secure tomato vines today.</span>
+      </div>
+
+      <div class="hero-actions" style="margin-top:15px;">
+        <button class="btn-ai-ask" onclick="toggleCommandPalette()">
+          <i class="fas fa-terminal"></i> Command Palette
+        </button>
+        <button class="btn-farm-view" onclick="window.location.href='command-center.html'">
+          <i class="fas fa-rocket"></i> Command Center
+        </button>
+      </div>
+    </section>
+
+    <!-- Contextual Quick Actions -->
+    <div class="page-action-bar" role="toolbar" aria-label="Dashboard quick actions">
+      <span class="pab-title">Quick Actions</span>
+      <button class="pab-btn primary" onclick="window.location.href='farm.html'"><i class="fas fa-plus"></i> Add Farm</button>
+      <button class="pab-btn" onclick="window.location.href='farm.html'"><i class="fas fa-clipboard-list"></i> Add Activity</button>
+      <button class="pab-btn" onclick="window.location.href='reports.html'"><i class="fas fa-chart-column"></i> View Reports</button>
+      <button class="pab-btn" onclick="window.location.href='ai.html'"><i class="fas fa-robot"></i> AI Assistant</button>
+      <button class="pab-btn" onclick="window.location.href='weather.html'"><i class="fas fa-cloud-sun"></i> Weather</button>
+    </div>
+
+    <!-- Key Core Score Metrics Row -->
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:20px;">
+      <div class="stat-box" style="padding:10px; text-align:center;">
+        <div style="font-size:16px; font-weight:800; color:var(--premium-green);"><i class="fas fa-seedling"></i> 92%</div>
+        <div style="font-size:8px; color:var(--text-muted);">Productivity</div>
+      </div>
+      <div class="stat-box" style="padding:10px; text-align:center;">
+        <div style="font-size:16px; font-weight:800; color:var(--premium-green);"><i class="fas fa-globe"></i> A-Grade</div>
+        <div style="font-size:8px; color:var(--text-muted);">Sustainability</div>
+      </div>
+      <div class="stat-box" style="padding:10px; text-align:center;">
+        <div style="font-size:16px; font-weight:800; color:var(--danger);"><i class="fas fa-triangle-exclamation"></i> Low</div>
+        <div style="font-size:8px; color:var(--text-muted);">Weather Risk</div>
+      </div>
+      <div class="stat-box" style="padding:10px; text-align:center;">
+        <div style="font-size:16px; font-weight:800; color:var(--premium-green);"><i class="fas fa-check-double"></i> Verified</div>
+        <div style="font-size:8px; color:var(--text-muted);">KYC Health</div>
+      </div>
+    </div>
+
+    <!-- Customizable Dashboard Widgets Grid -->
+    <div id="cmd-widgets-grid" class="widget-grid">
+
+      <!-- W1: Real-Time Weather -->
+      <div class="card-premium widget-card" id="widget-weather" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-weather', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-weather', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div onclick="window.location.href='weather.html'">
+          <h3 style="font-size:14px; margin-bottom:10px;"><i class="fas fa-cloud-sun" style="color:var(--premium-green); margin-right:6px;"></i> Today Weather</h3>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+            <div>
+              <div class="weather-temp" style="font-size:24px; color:var(--text-primary);">28°C</div>
+              <div style="font-size:11px; font-weight:600; color:var(--text-secondary);">Scattered Showers</div>
+            </div>
+            <i class="fas fa-cloud-sun-rain" style="font-size:28px; color:var(--premium-green);"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- W2: Mandi Price Ticker -->
+      <div class="card-premium widget-card" id="widget-market" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-market', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-market', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div onclick="window.location.href='marketplace.html'">
+          <h3 style="font-size:14px; margin-bottom:10px;"><i class="fas fa-chart-line" style="color:var(--premium-green); margin-right:6px;"></i> Live Mandi Prices</h3>
+          <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+            <span>Rice (Basmati)</span>
+            <strong>₹2,500/qtl <span style="color:var(--success);"><i class="fas fa-arrow-up"></i> +1.8%</span></strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:12px;">
+            <span>Cotton (Bt)</span>
+            <strong>₹6,700/qtl <span style="color:var(--success);"><i class="fas fa-arrow-up"></i> +2.5%</span></strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- W3: AI Recommendation -->
+      <div class="card-premium widget-card" id="widget-ai" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-ai', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-ai', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div onclick="window.location.href='ai.html'">
+          <h3 style="font-size:14px; margin-bottom:10px;"><i class="fas fa-robot" style="color:var(--premium-green); margin-right:6px;"></i> AI Insights Advisory</h3>
+          <p style="font-size:11px; color:var(--text-secondary); line-height:1.5;">
+            Soil moisture falling in Plot B. Schedule watering parameters to prevent cotton leaf yellowing.
+          </p>
+        </div>
+      </div>
+
+      <!-- W4: Upcoming Tasks Checklist -->
+      <div class="card-premium widget-card" id="widget-tasks" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-tasks', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-tasks', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="font-size:14px;"><i class="fas fa-calendar-check" style="color:var(--premium-green); margin-right:6px;"></i> Upcoming Tasks</h3>
+            <span style="font-size:9px; color:var(--premium-green); font-weight:700; cursor:pointer;" onclick="window.location.href='farm.html'">All Tasks</span>
+          </div>
+          <div id="home-tasks-list" style="font-size:11px; line-height:1.8;">
+            <!-- Loaded via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- W5: Wallet Cash Ledger -->
+      <div class="card-premium widget-card" id="widget-finance" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-finance', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-finance', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div onclick="window.location.href='finance.html'">
+          <h3 style="font-size:14px; margin-bottom:10px;"><i class="fas fa-wallet" style="color:var(--premium-green); margin-right:6px;"></i> Financial Health</h3>
+          <div style="font-size:24px; font-weight:800; color:var(--premium-green);">₹38,450</div>
+          <div style="font-size:9px; color:var(--text-muted);">Net cash margins healthy for July cycle</div>
+        </div>
+      </div>
+
+      <!-- W6: Dynamic Recent activities timeline -->
+      <div class="card-premium widget-card" id="widget-timeline" draggable="true">
+        <div class="widget-card-actions">
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-timeline', 'minimize')"><i class="fas fa-minus"></i></button>
+          <button class="widget-action-btn" onclick="toggleWidgetState('widget-timeline', 'hide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div onclick="window.location.href='farm.html'">
+          <h3 style="font-size:14px; margin-bottom:10px;"><i class="fas fa-clock-rotate-left" style="color:var(--premium-green); margin-right:6px;"></i> Activity Timeline</h3>
+          <div style="font-size:11px; line-height:1.6; color:var(--text-secondary);">
+            • Plot C: Organic Fertilizer spread (Yesterday)<br>
+            • Plot A: Water flow level sensor reset (2 days ago)
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recently Opened & Bookmarks Vault Preview -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:12px;"><i class="fas fa-star" style="color:var(--premium-green); margin-right:8px;"></i> Continue Activity</h3>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-secondary" style="flex:1; text-align:left; padding:12px;" onclick="window.location.href='learning.html'">
+          <i class="fas fa-graduation-cap" style="color:var(--premium-green); font-size:18px; margin-bottom:6px;"></i>
+          <div style="font-weight:600; font-size:11px;">Learning Course</div>
+          <div style="font-size:9px; color:var(--text-muted);">Advanced Hydroponics...</div>
+        </button>
+        <button class="btn-secondary" style="flex:1; text-align:left; padding:12px;" onclick="window.location.href='documents.html'">
+          <i class="fas fa-file-invoice" style="color:var(--premium-green); font-size:18px; margin-bottom:6px;"></i>
+          <div style="font-weight:600; font-size:11px;">Document Vault</div>
+          <div style="font-size:9px; color:var(--text-muted);">Land Record 7/12 Cert...</div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Farm Health Summary -->
+    <section class="card-premium" style="margin-bottom:16px;">
+      <h3 style="font-size:15px; margin-bottom:12px;"><i class="fas fa-heartbeat" style="color:var(--premium-green);"></i> Farm Health Summary</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div style="padding:12px; background:rgba(76,175,80,0.08); border-radius:10px; text-align:center;">
+          <div style="font-size:22px; font-weight:800; color:#2e7d32;">4</div>
+          <div style="font-size:10px; color:var(--text-muted);">Healthy Crops</div>
+        </div>
+        <div style="padding:12px; background:rgba(255,152,0,0.08); border-radius:10px; text-align:center;">
+          <div style="font-size:22px; font-weight:800; color:#e65100;">1</div>
+          <div style="font-size:10px; color:var(--text-muted);">Needs Attention</div>
+        </div>
+        <div style="padding:12px; background:rgba(33,150,243,0.08); border-radius:10px; text-align:center;">
+          <div style="font-size:22px; font-weight:800; color:#1565c0;">3</div>
+          <div style="font-size:10px; color:var(--text-muted);">Active Irrigation</div>
+        </div>
+        <div style="padding:12px; background:rgba(244,67,54,0.08); border-radius:10px; text-align:center;">
+          <div style="font-size:22px; font-weight:800; color:#c62828;">1</div>
+          <div style="font-size:10px; color:var(--text-muted);">Weather Risk</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Today's Farm Plan -->
+    <section class="card-premium" style="margin-bottom:16px;">
+      <h3 style="font-size:15px; margin-bottom:12px;"><i class="fas fa-calendar-check" style="color:var(--premium-green);"></i> Today's Farm Plan</h3>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg-card-soft); border-radius:8px;">
+          <i class="fas fa-tint" style="color:#2196F3; font-size:16px;"></i>
+          <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Irrigate Plot A & C</div><div style="font-size:11px; color:var(--text-muted);">6:00 AM - 8:00 AM</div></div>
+          <span class="badge badge-green" style="font-size:9px;">Done</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg-card-soft); border-radius:8px;">
+          <i class="fas fa-spray-can" style="color:#FF9800; font-size:16px;"></i>
+          <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Spray fertilizer on Plot B</div><div style="font-size:11px; color:var(--text-muted);">10:00 AM - 12:00 PM</div></div>
+          <span class="badge" style="font-size:9px; background:rgba(255,152,0,0.1); color:#e65100;">Pending</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg-card-soft); border-radius:8px;">
+          <i class="fas fa-user-check" style="color:#9C27B0; font-size:16px;"></i>
+          <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Worker arrival - Mahesh</div><div style="font-size:11px; color:var(--text-muted);">2:00 PM - Harvesting</div></div>
+          <span class="badge" style="font-size:9px; background:rgba(156,39,176,0.1); color:#7b1fa2;">Upcoming</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Important Alerts -->
+    <section class="card-premium" style="margin-bottom:16px;">
+      <h3 style="font-size:15px; margin-bottom:12px;"><i class="fas fa-triangle-exclamation" style="color:#FF9800;"></i> Important Alerts</h3>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; align-items:flex-start; gap:10px; padding:10px; background:rgba(244,67,54,0.05); border-left:3px solid #f44336; border-radius:0 8px 8px 0;">
+          <i class="fas fa-cloud-rain" style="color:#f44336; font-size:16px; margin-top:2px;"></i>
+          <div><div style="font-size:13px; font-weight:600;">Heavy Rain Warning</div><div style="font-size:11px; color:var(--text-muted);">Expected tomorrow 2PM-8PM. Secure harvested crops.</div></div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px; padding:10px; background:rgba(255,152,0,0.05); border-left:3px solid #FF9800; border-radius:0 8px 8px 0;">
+          <i class="fas fa-bug" style="color:#FF9800; font-size:16px; margin-top:2px;"></i>
+          <div><div style="font-size:13px; font-weight:600;">Pest Alert - Plot D</div><div style="font-size:11px; color:var(--text-muted);">Aphid activity detected. Apply neem oil spray.</div></div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px; padding:10px; background:rgba(33,150,243,0.05); border-left:3px solid #2196F3; border-radius:0 8px 8px 0;">
+          <i class="fas fa-landmark" style="color:#2196F3; font-size:16px; margin-top:2px;"></i>
+          <div><div style="font-size:13px; font-weight:600;">PM-KISAN Deadline</div><div style="font-size:11px; color:var(--text-muted);">Register for next installment by July 31.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="card-premium" style="margin-bottom:16px;">
+      <h3 style="font-size:15px; margin-bottom:12px;"><i class="fas fa-clock-rotate-left" style="color:var(--premium-green);"></i> Recent Activity</h3>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-light);">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(76,175,80,0.1); display:flex; align-items:center; justify-content:center;"><i class="fas fa-seedling" style="color:#4CAF50; font-size:14px;"></i></div>
+          <div style="flex:1;"><div style="font-size:13px;">Added new crop: <strong>Rice (Basmati)</strong></div><div style="font-size:10px; color:var(--text-muted);">2 hours ago</div></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-light);">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(255,152,0,0.1); display:flex; align-items:center; justify-content:center;"><i class="fas fa-indian-rupee-sign" style="color:#FF9800; font-size:14px;"></i></div>
+          <div style="flex:1;"><div style="font-size:13px;">Expense recorded: <strong>₹4,500</strong></div><div style="font-size:10px; color:var(--text-muted);">5 hours ago</div></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(33,150,243,0.1); display:flex; align-items:center; justify-content:center;"><i class="fas fa-user-plus" style="color:#2196F3; font-size:14px;"></i></div>
+          <div style="flex:1;"><div style="font-size:13px;">Worker booked: <strong>Mahesh Yadav</strong></div><div style="font-size:10px; color:var(--text-muted);">Yesterday</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Help -->
+    <section class="card-premium" style="margin-bottom:16px;">
+      <h3 style="font-size:15px; margin-bottom:12px;"><i class="fas fa-handshake-angle" style="color:var(--premium-green);"></i> Quick Help</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+        <a href="expert.html" style="display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; background:var(--bg-card-soft); border-radius:10px; text-decoration:none; color:inherit; text-align:center;">
+          <i class="fas fa-user-doctor" style="color:var(--primary-green); font-size:20px;"></i>
+          <span style="font-size:11px; font-weight:600;">Contact Expert</span>
+        </a>
+        <a href="emergency.html" style="display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; background:rgba(244,67,54,0.06); border-radius:10px; text-decoration:none; color:inherit; text-align:center;">
+          <i class="fas fa-truck-medical" style="color:#f44336; font-size:20px;"></i>
+          <span style="font-size:11px; font-weight:600;">Emergency</span>
+        </a>
+        <a href="help.html" style="display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; background:var(--bg-card-soft); border-radius:10px; text-decoration:none; color:inherit; text-align:center;">
+          <i class="fas fa-circle-question" style="color:var(--primary-green); font-size:20px;"></i>
+          <span style="font-size:11px; font-weight:600;">Help Center</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    let dragSrcElement = null;
+    function handleDragStart(e) {
+      this.style.opacity = '0.4';
+      dragSrcElement = this;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.innerHTML);
+      e.dataTransfer.setData('text/plain', this.id);
+    }
+    function handleDragOver(e) {
+      if (e.preventDefault) e.preventDefault();
+      this.classList.add('dragged-over');
+      return false;
+    }
+    function handleDragLeave() {
+      this.classList.remove('dragged-over');
+    }
+    function handleDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.classList.remove('dragged-over');
+      if (dragSrcElement !== this) {
+        const srcId = e.dataTransfer.getData('text/plain');
+        const targetId = this.id;
+        const srcInner = dragSrcElement.innerHTML;
+        const targetInner = this.innerHTML;
+
+        dragSrcElement.innerHTML = targetInner;
+        this.innerHTML = srcInner;
+        dragSrcElement.id = targetId;
+        this.id = srcId;
+
+        saveWidgetLayoutIndex();
+      }
+      return false;
+    }
+    function handleDragEnd() {
+      this.style.opacity = '1';
+      document.querySelectorAll('.widget-card').forEach(item => item.classList.remove('dragged-over'));
+    }
+    function initIndexDrag() {
+      document.querySelectorAll('.widget-card').forEach(item => {
+        item.addEventListener('dragstart', handleDragStart, false);
+        item.addEventListener('dragover', handleDragOver, false);
+        item.addEventListener('dragleave', handleDragLeave, false);
+        item.addEventListener('drop', handleDrop, false);
+        item.addEventListener('dragend', handleDragEnd, false);
+      });
+    }
+    function toggleWidgetState(id, action) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (action === 'minimize') {
+        el.classList.toggle("minimized");
+        showToast("Widget status updated", "warning");
+      } else if (action === 'hide') {
+        el.style.display = "none";
+        showToast("Widget hidden.", "warning");
+      }
+      saveWidgetLayoutIndex();
+    }
+    function saveWidgetLayoutIndex() {
+      const states = [];
+      document.querySelectorAll('.widget-card').forEach(item => {
+        states.push({
+          id: item.id,
+          minimized: item.classList.contains("minimized"),
+          hidden: item.style.display === "none",
+          html: item.innerHTML
+        });
+      });
+      localStorage.setItem("index-widget-layouts", JSON.stringify(states));
+    }
+    function loadWidgetLayoutIndex() {
+      const saved = JSON.parse(localStorage.getItem("index-widget-layouts"));
+      if (!saved) return;
+      const grid = document.getElementById("cmd-widgets-grid");
+      grid.innerHTML = "";
+      saved.forEach(w => {
+        const div = document.createElement("div");
+        div.className = "card-premium widget-card";
+        div.id = w.id;
+        div.draggable = true;
+        div.innerHTML = w.html;
+        if (w.minimized) div.classList.add("minimized");
+        if (w.hidden) div.style.display = "none";
+        grid.appendChild(div);
+      });
+    }
+    function resetWidgets() {
+      localStorage.removeItem("index-widget-layouts");
+      location.reload();
+    }
+    window.addEventListener("load", () => {
+      loadWidgetLayoutIndex();
+      initIndexDrag();
+
+      const displayName = localStorage.getItem("user-display-name");
+      if (displayName) {
+        document.getElementById("farmer-name-display").textContent = displayName;
+      }
+    });
+  </script>
+</body>
+</html>

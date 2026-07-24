@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Productivity Tools</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <section class="hero-dashboard" style="background:var(--gradient-primary); margin-bottom:25px;">
+      <h2><i class="fas fa-calculator"></i> Productivity Tools</h2>
+      <p style="font-size:13px; color:rgba(255,255,255,0.9); margin-top:5px;">
+        11 Interactive farming calculators designed to optimize seed spacing, fertilizer distribution, loan payments, and crop margins.
+      </p>
+    </section>
+
+    <div style="display:flex; flex-direction:column; gap:20px;">
+
+      <div class="calc-card">
+        <h3><i class="fas fa-map-marked-alt" style="color:var(--premium-green); margin-right:8px;"></i> Farm Area Unit Converter</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Convert between standard agricultural units instantly.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Acres Input</label>
+          <input type="number" id="calc-farm-acres" class="form-input" value="10" oninput="runFarmCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Equivalent Area Sizes:</div>
+          <div style="margin-top:8px; font-size:14px; font-weight:700; color:var(--premium-green);">
+            <span id="farm-res-hectares">4.05</span> Hectares • <span id="farm-res-gunthas">400</span> Gunthas • <span id="farm-res-sqft">435,600</span> Sq. Ft.
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-seedling" style="color:var(--premium-green); margin-right:8px;"></i> Seed Rate Calculator</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Calculate seed counts based on plant-to-row spacing and field area.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Acre Area: <span class="calc-val-display" id="lbl-seed-acres">2 Ac</span></label>
+          <input type="range" class="calc-slider" id="calc-seed-acres" min="0.5" max="25" step="0.5" value="2" oninput="runSeedCalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Row Spacing (inches): <span class="calc-val-display" id="lbl-seed-row">12"</span></label>
+          <input type="range" class="calc-slider" id="calc-seed-row" min="6" max="48" step="1" value="12" oninput="runSeedCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Estimated Seeds Required:</div>
+          <div id="seed-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">87,120 Seeds</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-leaf" style="color:var(--premium-green); margin-right:8px;"></i> Fertilizer NPK Requirement</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Determine primary fertilizer inputs based on target crop guidelines.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Select Target Crop</label>
+          <select id="calc-fert-crop" class="form-input" onchange="runFertCalc()" style="background-image:none;">
+            <option value="rice">Rice (Basmati) - Standard NPK 120:60:40</option>
+            <option value="cotton">Cotton - Standard NPK 100:50:50</option>
+            <option value="wheat">Wheat - Standard NPK 120:60:60</option>
+          </select>
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Farm Size: <span class="calc-val-display" id="lbl-fert-acres">5 Ac</span></label>
+          <input type="range" class="calc-slider" id="calc-fert-acres" min="1" max="50" step="1" value="5" oninput="runFertCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Total Nutrient Quantities Required:</div>
+          <div id="fert-res" style="font-size:16px; font-weight:800; color:var(--premium-green); margin-top:5px;">Nitrogen: 600kg • Phosphorus: 300kg • Potassium: 200kg</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-droplet" style="color:var(--premium-green); margin-right:8px;"></i> Irrigation Water Calculator</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Est. daily water need based on crop type and temperature readings.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Select Soil Type</label>
+          <select id="calc-water-soil" class="form-input" onchange="runWaterCalc()" style="background-image:none;">
+            <option value="clayey">Clayey Soil (High Retention)</option>
+            <option value="loamy">Loamy Soil (Medium Retention)</option>
+            <option value="sandy">Sandy Soil (Low Retention)</option>
+          </select>
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Mean Daily Temp: <span class="calc-val-display" id="lbl-water-temp">28°C</span></label>
+          <input type="range" class="calc-slider" id="calc-water-temp" min="18" max="45" step="1" value="28" oninput="runWaterCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Daily Irrigation Recommended Volume:</div>
+          <div id="water-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">3,240 Litres / Acre</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-weight-hanging" style="color:var(--premium-green); margin-right:8px;"></i> Estimated Harvest Yield</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Forecast harvest weights based on historical soil metrics.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Expected Germination Rate: <span class="calc-val-display" id="lbl-yield-germ">85%</span></label>
+          <input type="range" class="calc-slider" id="calc-yield-germ" min="50" max="100" step="5" value="85" oninput="runYieldCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Projected Yield:</div>
+          <div id="yield-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">14.2 Tonnes Total</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-coins" style="color:var(--premium-green); margin-right:8px;"></i> Crop Profit Forecaster</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Revenue projections against seed, fertilizer, and labor expenditures.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Projected Revenue (₹):</label>
+          <input type="number" id="calc-prof-rev" class="form-input" value="150000" oninput="runProfitCalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Total Expenses (₹):</label>
+          <input type="number" id="calc-prof-exp" class="form-input" value="65000" oninput="runProfitCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Net Profit Margin:</div>
+          <div id="profit-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">₹85,000 (56.7% ROI)</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-hand-holding-dollar" style="color:var(--premium-green); margin-right:8px;"></i> Kisan Loan EMI Calculator</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Compute monthly instalments and total interest liabilities.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Principal Loan Amount (₹):</label>
+          <input type="number" id="calc-loan-amt" class="form-input" value="100000" oninput="runLoanCalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Annual Interest Rate (%): <span class="calc-val-display" id="lbl-loan-rate">7%</span></label>
+          <input type="range" class="calc-slider" id="calc-loan-rate" min="4" max="15" step="0.25" value="7" oninput="runLoanCalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Tenure (Years): <span class="calc-val-display" id="lbl-loan-term">3 Yrs</span></label>
+          <input type="range" class="calc-slider" id="calc-loan-term" min="1" max="10" step="1" value="3" oninput="runLoanCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Monthly EMI Payment:</div>
+          <div id="loan-res" style="font-size:18px; font-weight:800; color:var(--premium-green); margin-top:5px;">₹3,088/Month (Total Interest: ₹11,156)</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-cloud-sun" style="color:var(--premium-green); margin-right:8px;"></i> Regional Weather Comparison</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Side-by-side weather comparisons to schedule harvesting windows.</p>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+          <div style="flex:1;">
+            <label class="form-label" style="font-size:10px;">Region A</label>
+            <select id="calc-wea-a" class="form-input" onchange="runWeatherComp()" style="background-image:none; font-size:11px;">
+              <option value="Pune">Pune District</option>
+              <option value="Nagpur">Nagpur Division</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label class="form-label" style="font-size:10px;">Region B</label>
+            <select id="calc-wea-b" class="form-input" onchange="runWeatherComp()" style="background-image:none; font-size:11px;">
+              <option value="Nagpur">Nagpur Division</option>
+              <option value="Pune">Pune District</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Comparison Result:</div>
+          <div id="weather-comp-res" style="font-size:13px; font-weight:600; color:var(--premium-green); margin-top:5px;">Pune: 28°C (Showers) vs Nagpur: 34°C (Sunny)</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-right-left" style="color:var(--premium-green); margin-right:8px;"></i> Crop Yield & Price Comparison</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Compare duration, water requirements, and market rates of two options.</p>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+          <div style="flex:1;">
+            <select id="calc-crop-a" class="form-input" onchange="runCropComp()" style="background-image:none; font-size:11px;">
+              <option value="Rice">Rice (Basmati)</option>
+              <option value="Cotton">Cotton</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <select id="calc-crop-b" class="form-input" onchange="runCropComp()" style="background-image:none; font-size:11px;">
+              <option value="Cotton" selected>Cotton</option>
+              <option value="Rice">Rice (Basmati)</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result-box" style="text-align:left;">
+          <div id="crop-comp-res" style="font-size:12px; font-weight:500; color:var(--text-primary); line-height:1.6;">
+            • Rice: 120 Days | High Water | ₹2,500/qtl<br>• Cotton: 160 Days | Medium Water | ₹6,700/qtl
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-receipt" style="color:var(--premium-green); margin-right:8px;"></i> Crop Expense Breakdown</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Aggregate fertilizer, seed, watering, machinery, and manual labor inputs.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Seed Cost: ₹<span id="exp-lbl-seed">5000</span></label>
+          <input type="range" class="calc-slider" id="exp-seed" min="1000" max="25000" step="500" value="5000" oninput="runExpenseCalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Labor Cost: ₹<span id="exp-lbl-labor">12000</span></label>
+          <input type="range" class="calc-slider" id="exp-labor" min="1000" max="50000" step="1000" value="12000" oninput="runExpenseCalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Total Aggregated Expenditure:</div>
+          <div id="exp-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">₹17,000</div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3><i class="fas fa-percent" style="color:var(--premium-green); margin-right:8px;"></i> ROI (Return on Investment)</h3>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Evaluate capital efficiency ratio of crop investments.</p>
+        <div class="calc-input-group">
+          <label class="form-label">Capital Invested (₹):</label>
+          <input type="number" id="roi-inv" class="form-input" value="50000" oninput="runROICalc()">
+        </div>
+        <div class="calc-input-group">
+          <label class="form-label">Net Sales Revenue (₹):</label>
+          <input type="number" id="roi-rev" class="form-input" value="95000" oninput="runROICalc()">
+        </div>
+        <div class="calc-result-box">
+          <div style="font-size:12px; font-weight:600;">Return on Capital Ratio (ROI):</div>
+          <div id="roi-res" style="font-size:20px; font-weight:800; color:var(--premium-green); margin-top:5px;">90.0% Efficiency</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    function runFarmCalc() {
+      const a = parseFloat(document.getElementById("calc-farm-acres").value) || 0;
+      document.getElementById("farm-res-hectares").textContent = (a * 0.404686).toFixed(2);
+      document.getElementById("farm-res-gunthas").textContent = (a * 40).toFixed(0);
+      document.getElementById("farm-res-sqft").textContent = (a * 43560).toLocaleString();
+    }
+    function runSeedCalc() {
+      const a = parseFloat(document.getElementById("calc-seed-acres").value);
+      const s = parseFloat(document.getElementById("calc-seed-row").value);
+      document.getElementById("lbl-seed-acres").textContent = a + " Ac";
+      document.getElementById("lbl-seed-row").textContent = s + '"';
+      const count = Math.round((a * 43560 * 144) / (s * s) / 10);
+      document.getElementById("seed-res").textContent = count.toLocaleString() + " Seeds";
+    }
+    function runFertCalc() {
+      const c = document.getElementById("calc-fert-crop").value;
+      const a = parseInt(document.getElementById("calc-fert-acres").value);
+      document.getElementById("lbl-fert-acres").textContent = a + " Ac";
+      let n = 120, p = 60, k = 40;
+      if (c === 'cotton') { n = 100; p = 50; k = 50; } else if (c === 'wheat') { n = 120; p = 60; k = 60; }
+      document.getElementById("fert-res").textContent = "Nitrogen (N): " + (n*a) + "kg • Phosphorus (P): " + (p*a) + "kg • Potassium (K): " + (k*a) + "kg";
+    }
+    function runWaterCalc() {
+      const s = document.getElementById("calc-water-soil").value;
+      const t = parseInt(document.getElementById("calc-water-temp").value);
+      document.getElementById("lbl-water-temp").textContent = t + "°C";
+      let f = 100; if (s === 'clayey') f = 80; if (s === 'sandy') f = 150;
+      document.getElementById("water-res").textContent = Math.round(t * f * 1.15).toLocaleString() + " Litres / Acre";
+    }
+    function runYieldCalc() {
+      const g = parseInt(document.getElementById("calc-yield-germ").value);
+      document.getElementById("lbl-yield-germ").textContent = g + "%";
+      document.getElementById("yield-res").textContent = ((g / 100) * 16.7).toFixed(1) + " Tonnes Total";
+    }
+    function runProfitCalc() {
+      const r = parseFloat(document.getElementById("calc-prof-rev").value) || 0;
+      const e = parseFloat(document.getElementById("calc-prof-exp").value) || 0;
+      const d = r - e;
+      document.getElementById("profit-res").textContent = "₹" + d.toLocaleString() + " (" + (r > 0 ? ((d/e)*100).toFixed(1) : 0) + "% ROI)";
+    }
+    function runLoanCalc() {
+      const pr = parseFloat(document.getElementById("calc-loan-amt").value) || 0;
+      const rt = parseFloat(document.getElementById("calc-loan-rate").value);
+      const tn = parseInt(document.getElementById("calc-loan-term").value);
+      document.getElementById("lbl-loan-rate").textContent = rt + "%";
+      document.getElementById("lbl-loan-term").textContent = tn + " Yrs";
+      const mr = (rt / 100) / 12; const mo = tn * 12;
+      const emi = (pr * mr * Math.pow(1 + mr, mo)) / (Math.pow(1 + mr, mo) - 1);
+      if (!isNaN(emi) && isFinite(emi)) document.getElementById("loan-res").textContent = "₹" + Math.round(emi).toLocaleString() + "/Month (Total Interest: ₹" + Math.round(emi*mo-pr).toLocaleString() + ")";
+      else document.getElementById("loan-res").textContent = "₹0 / Month";
+    }
+    function runWeatherComp() {
+      const d = { Pune: "28°C (Showers)", Nagpur: "34°C (Sunny)" };
+      document.getElementById("weather-comp-res").textContent = document.getElementById("calc-wea-a").value + ": " + d[document.getElementById("calc-wea-a").value] + " vs " + document.getElementById("calc-wea-b").value + ": " + d[document.getElementById("calc-wea-b").value];
+    }
+    function runCropComp() {
+      const info = { Rice: "120 Days | High Water | ₹2,500/qtl", Cotton: "160 Days | Medium Water | ₹6,700/qtl" };
+      const a = document.getElementById("calc-crop-a").value; const b = document.getElementById("calc-crop-b").value;
+      document.getElementById("crop-comp-res").innerHTML = "• " + a + ": " + info[a] + "<br>• " + b + ": " + info[b];
+    }
+    function runExpenseCalc() {
+      const s = parseInt(document.getElementById("exp-seed").value); const l = parseInt(document.getElementById("exp-labor").value);
+      document.getElementById("exp-lbl-seed").textContent = s.toLocaleString(); document.getElementById("exp-lbl-labor").textContent = l.toLocaleString();
+      document.getElementById("exp-res").textContent = "₹" + (s + l + 4000).toLocaleString();
+    }
+    function runROICalc() {
+      const i = parseFloat(document.getElementById("roi-inv").value) || 1; const r = parseFloat(document.getElementById("roi-rev").value) || 0;
+      document.getElementById("roi-res").textContent = (((r - i) / i) * 100).toFixed(1) + "% Efficiency";
+    }
+    window.addEventListener("load", () => { runFarmCalc(); runSeedCalc(); runFertCalc(); runWaterCalc(); runYieldCalc(); runProfitCalc(); runLoanCalc(); runWeatherComp(); runCropComp(); runExpenseCalc(); runROICalc(); });
+  </script>
+</body>
+</html>

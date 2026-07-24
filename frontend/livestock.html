@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>Farm Assist - Livestock Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Livestock</span>
+    </nav>
+    <div class="page-header">
+      <div>
+        <h1>Livestock Management</h1>
+        <p>Animal health, vaccination, milk production, feed management</p>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="stat-box">
+        <i class="fas fa-paw" style="color:var(--primary-green);"></i>
+        <div class="stat-box-num" data-livestock-total>5</div>
+        <div class="stat-box-label">Total Animals</div>
+      </div>
+      <div class="stat-box">
+        <i class="fas fa-heartbeat" style="color:var(--success);"></i>
+        <div class="stat-box-num">4</div>
+        <div class="stat-box-label">Healthy</div>
+      </div>
+      <div class="stat-box">
+        <i class="fas fa-syringe" style="color:var(--warning);"></i>
+        <div class="stat-box-num">1</div>
+        <div class="stat-box-label">Vaccination Due</div>
+      </div>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="showLivestockTab('all',this)">All</button>
+      <button class="filter-tab" onclick="showLivestockTab('cow',this)">Cows</button>
+      <button class="filter-tab" onclick="showLivestockTab('buffalo',this)">Buffalo</button>
+      <button class="filter-tab" onclick="showLivestockTab('goat',this)">Goat</button>
+      <button class="filter-tab" onclick="showLivestockTab('chicken',this)">Chicken</button>
+    </div>
+
+    <div id="livestock-content"></div>
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    function showLivestockTab(type, btn) {
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      if (typeof initLivestockHealth === 'function') {
+        initLivestockHealth('livestock-content');
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() { showLivestockTab('all', document.querySelector('.filter-tab')); }, 200);
+    });
+  </script>
+</body>
+</html>

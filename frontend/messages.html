@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Messages - Farm Assist</title>
+  <meta name="description" content="Conversations list for Farm Assist messaging.">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B3D2E">
+
+  <!-- FontAwesome 6.5.0 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container" style="padding-top: var(--topbar-height); padding-bottom: calc(var(--bottomnav-height) + 24px);">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Messages</span>
+    </nav>
+
+    <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search conversations..." id="conv-search"></div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="unread">Unread</button>
+      <button class="filter-tab" data-filter="community">Community</button>
+      <button class="filter-tab" data-filter="expert">Experts</button>
+      <button class="filter-tab" data-filter="government">Government</button>
+      <button class="filter-tab" data-filter="marketplace">Marketplace</button>
+      <button class="filter-tab" data-filter="farm-alerts">Farm Alerts</button>
+    </div>
+
+    <div id="conversations-list">
+
+      <div class="conversation-item" data-id="community" data-type="community">
+        <div class="conversation-avatar" style="background-color:#4CAF50;"><i class="fas fa-users"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Farmer Community - Rajesh Kumar</span>
+            <span class="conversation-time">2m</span>
+          </div>
+          <div class="conversation-preview">Rajesh replied to your post about pest control methods for cotton...</div>
+        </div>
+        <div class="conversation-badge">3</div>
+      </div>
+
+      <div class="conversation-item" data-id="expert" data-type="expert">
+        <div class="conversation-avatar" style="background-color:#2196F3;"><i class="fas fa-user-doctor"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Dr. Arvind S. (Expert)</span>
+            <span class="conversation-time">15m</span>
+          </div>
+          <div class="conversation-preview">Your soil test results are ready for review</div>
+        </div>
+        <div class="conversation-badge">1</div>
+      </div>
+
+      <div class="conversation-item" data-id="network" data-type="community">
+        <div class="conversation-avatar" style="background-color:#FF9800;"><i class="fas fa-handshake"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Local Farmer Network</span>
+            <span class="conversation-time">1h</span>
+          </div>
+          <div class="conversation-preview">Next meetup is scheduled for this Saturday</div>
+        </div>
+      </div>
+
+      <div class="conversation-item" data-id="government" data-type="government">
+        <div class="conversation-avatar" style="background-color:#9C27B0;"><i class="fas fa-landmark"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Government Schemes</span>
+            <span class="conversation-time">2h</span>
+          </div>
+          <div class="conversation-preview">PM-KISAN installment deposited to your account</div>
+        </div>
+        <div class="conversation-badge">2</div>
+      </div>
+
+      <div class="conversation-item" data-id="marketplace" data-type="marketplace">
+        <div class="conversation-avatar" style="background-color:#795548;"><i class="fas fa-store"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Marketplace</span>
+            <span class="conversation-time">5h</span>
+          </div>
+          <div class="conversation-preview">Order #4521 shipped successfully</div>
+        </div>
+      </div>
+
+      <div class="conversation-item" data-id="worker" data-type="community">
+        <div class="conversation-avatar" style="background-color:#00BCD4;"><i class="fas fa-hard-hat"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Mahesh (Worker)</span>
+            <span class="conversation-time">1d</span>
+          </div>
+          <div class="conversation-preview">Mahesh confirmed booking for tomorrow</div>
+        </div>
+      </div>
+
+      <div class="conversation-item" data-id="support" data-type="farm-alerts">
+        <div class="conversation-avatar" style="background-color:#607D8B;"><i class="fas fa-headset"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Farm Assist Support</span>
+            <span class="conversation-time">2d</span>
+          </div>
+          <div class="conversation-preview">Welcome to Farm Assist Messages</div>
+        </div>
+      </div>
+
+      <div class="conversation-item" data-id="neighbor" data-type="community">
+        <div class="conversation-avatar" style="background-color:#8BC34A;"><i class="fas fa-person"></i></div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">Gurbachan Singh (Neighbor)</span>
+            <span class="conversation-time">3d</span>
+          </div>
+          <div class="conversation-preview">Can we share the harvester next week?</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="empty-state" style="display:none; text-align:center; padding:60px 20px;"><i class="fas fa-comments" style="font-size:48px; color:var(--primary-green); opacity:0.3; margin-bottom:12px;"></i><h3 style="color:var(--text-secondary);">No conversations found</h3><p style="font-size:12px; color:var(--text-muted);">Try adjusting your search or filter</p></div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    (function() {
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const convItems = document.querySelectorAll('.conversation-item');
+      const searchInput = document.getElementById('conv-search');
+      const emptyState = document.getElementById('empty-state');
+      let activeFilter = 'all';
+
+      function applyFilters() {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        convItems.forEach(function(item) {
+          const type = item.getAttribute('data-type');
+          const name = item.querySelector('.conversation-name').textContent.toLowerCase();
+          const preview = item.querySelector('.conversation-preview').textContent.toLowerCase();
+          const hasUnread = item.querySelector('.conversation-badge') !== null;
+
+          let matchFilter = false;
+          if (activeFilter === 'all') {
+            matchFilter = true;
+          } else if (activeFilter === 'unread') {
+            matchFilter = hasUnread;
+          } else if (activeFilter === 'farm-alerts') {
+            matchFilter = type === 'farm-alerts';
+          } else {
+            matchFilter = type === activeFilter;
+          }
+
+          let matchSearch = true;
+          if (query) {
+            matchSearch = name.indexOf(query) !== -1 || preview.indexOf(query) !== -1;
+          }
+
+          if (matchFilter && matchSearch) {
+            item.style.display = '';
+            visibleCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        if (visibleCount === 0) {
+          emptyState.style.display = '';
+        } else {
+          emptyState.style.display = 'none';
+        }
+      }
+
+      filterTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          filterTabs.forEach(function(t) { t.classList.remove('active'); });
+          tab.classList.add('active');
+          activeFilter = tab.getAttribute('data-filter');
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener('input', function() {
+        applyFilters();
+      });
+
+      convItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var conversationId = item.getAttribute('data-id');
+          window.location.href = 'chat.html?id=' + conversationId;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Farm Service Marketplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .worker-card { background: white; border: 1px solid var(--border-light); border-radius: 12px; padding: 16px; transition: all 0.2s; cursor: pointer; }
+    .worker-card:hover { border-color: var(--primary-green); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .worker-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; }
+    .worker-name { font-size: 15px; font-weight: 700; }
+    .worker-type-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(27,94,63,0.1); color: var(--primary-green); }
+    .worker-skills { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+    .worker-skill-tag { padding: 2px 8px; border-radius: 8px; font-size: 10px; background: var(--bg-card-soft); color: var(--text-secondary); }
+    .worker-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; }
+    .worker-rating i { color: #FFB300; font-size: 12px; }
+    .worker-price { font-size: 18px; font-weight: 800; color: var(--primary-green); }
+    .worker-price small { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .worker-availability { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 8px; }
+    .worker-availability.available { background: rgba(76,175,80,0.1); color: #2e7d32; }
+    .worker-availability.busy { background: rgba(255,152,0,0.1); color: #e65100; }
+    .worker-availability-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .worker-availability.available .worker-availability-dot { background: #4CAF50; }
+    .worker-availability.busy .worker-availability-dot { background: #FF9800; }
+    .worker-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (max-width: 640px) { .worker-grid { grid-template-columns: 1fr; } }
+    .best-match-card { background: linear-gradient(135deg, rgba(27,94,63,0.05), rgba(76,175,80,0.08)); border: 2px solid var(--primary-green); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 24px; }
+    .filter-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border-light); background: white; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .filter-tab.active { background: var(--primary-green); color: white; border-color: var(--primary-green); }
+    .search-bar { position: relative; margin-bottom: 12px; }
+    .search-bar input { width: 100%; padding: 12px 16px 12px 40px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; outline: none; }
+    .search-bar i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .sort-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .sort-row select { padding: 6px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; }
+    .profile-modal-header { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; flex-shrink: 0; }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+    .booking-step { margin-bottom: 16px; }
+    .booking-step label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--text-secondary); }
+    .booking-step input, .booking-step select { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; }
+    .cost-display { background: rgba(27,94,63,0.05); border: 1px solid rgba(27,94,63,0.2); border-radius: 12px; padding: 16px; text-align: center; margin: 16px 0; }
+    .cost-display .amount { font-size: 28px; font-weight: 800; color: var(--primary-green); }
+    .history-entry { padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+    .history-entry:last-child { border-bottom: none; }
+    .time-slots { display: flex; flex-wrap: wrap; gap: 6px; }
+    .time-slot { padding: 6px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; cursor: pointer; }
+    .time-slot.selected { background: var(--primary-green); color: white; border-color: var(--primary-green); }
+    .confirm-success { text-align: center; padding: 20px 0; }
+    .confirm-success i { font-size: 64px; color: #4CAF50; margin-bottom: 16px; }
+    .confirm-detail { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+    .btn-book { width: 100%; padding: 12px; border: none; border-radius: 12px; background: var(--primary-green); color: white; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .btn-book:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+<main class="page-container" style="padding-top:var(--topbar-height);padding-bottom:calc(var(--bottomnav-height)+24px);">
+
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a> <span class="bc-sep">/</span>
+    <span class="bc-current">Workers</span>
+  </nav>
+
+  <div class="page-header">
+    <div>
+      <h1><i class="fas fa-hard-hat" style="margin-right:8px;"></i>Available Farm Workers &amp; Services</h1>
+      <p>Find verified workers for all your farming needs</p>
+    </div>
+  </div>
+
+  <!-- Best Match -->
+  <div class="best-match-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <i class="fas fa-star" style="color:#FFB300;"></i>
+      <h3 style="font-size:15px;font-weight:700;">Best Match for Your Farm</h3>
+    </div>
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <div class="worker-avatar" style="background:linear-gradient(135deg,#1B5E3F,#4CAF50);flex-shrink:0;">
+        <i class="fas fa-user"></i>
+      </div>
+      <div style="flex:1;">
+        <div class="worker-name">Priya Devi</div>
+        <span class="worker-type-badge" style="margin-top:4px;">Irrigation Specialist</span>
+        <p style="font-size:12px;color:var(--text-secondary);margin:8px 0 4px;">Recommended because this worker is available tomorrow, works with rice harvesting, and is within 5 km of your farm.</p>
+        <div class="worker-rating" style="margin-bottom:8px;">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+          <span>4.9</span>
+          <span style="color:var(--text-muted);font-weight:400;">(127 reviews)</span>
+        </div>
+        <div class="worker-availability available" style="margin-bottom:8px;">
+          <span class="worker-availability-dot"></span> Available Now
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;">
+          <span class="worker-price">₹150<small>/hr</small></span>
+          <span class="worker-price">₹900<small>/day</small></span>
+        </div>
+        <button class="btn-book" style="max-width:160px;" onclick="openBookingModal(2)">
+          <i class="fas fa-calendar-check"></i> Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search workers by name or skill..." oninput="applyFilters()">
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all" onclick="setFilter('all',this)">All</button>
+    <button class="filter-tab" data-filter="Harvesting" onclick="setFilter('Harvesting',this)">Harvesting</button>
+    <button class="filter-tab" data-filter="Planting" onclick="setFilter('Planting',this)">Planting</button>
+    <button class="filter-tab" data-filter="Irrigation" onclick="setFilter('Irrigation',this)">Irrigation</button>
+    <button class="filter-tab" data-filter="Livestock" onclick="setFilter('Livestock',this)">Livestock</button>
+    <button class="filter-tab" data-filter="Equipment" onclick="setFilter('Equipment',this)">Equipment</button>
+    <button class="filter-tab" data-filter="available" onclick="setFilter('available',this)">Available Now</button>
+  </div>
+
+  <!-- Sort -->
+  <div class="sort-row">
+    <span id="resultCount" style="font-size:13px;font-weight:600;color:var(--text-secondary);">8 workers found</span>
+    <select id="sortSelect" onchange="applyFilters()">
+      <option value="nearest">Nearest</option>
+      <option value="price-low">Lowest Price</option>
+      <option value="highest-rated">Highest Rated</option>
+      <option value="available-now">Available Now</option>
+    </select>
+  </div>
+
+  <!-- Worker Cards Grid -->
+  <div class="worker-grid" id="workerGrid"></div>
+
+</main>
+
+<!-- Worker Profile Modal -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-content" style="position:relative;">
+    <button class="modal-close" onclick="closeProfileModal()"><i class="fas fa-times"></i></button>
+    <div class="profile-modal-header">
+      <div class="profile-avatar" id="profileAvatar" style="background:linear-gradient(135deg,#1B5E3F,#4CAF50);">
+        <i class="fas fa-user"></i>
+      </div>
+      <div>
+        <div id="profileName" style="font-size:18px;font-weight:800;"></div>
+        <span class="worker-type-badge" id="profileType" style="margin-top:4px;"></span>
+        <div class="worker-rating" style="margin-top:6px;" id="profileRating"></div>
+      </div>
+    </div>
+    <p id="profileBio" style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;"></p>
+    <div style="margin-bottom:12px;">
+      <h4 style="font-size:13px;font-weight:700;margin-bottom:6px;">Skills</h4>
+      <div class="worker-skills" id="profileSkills"></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <h4 style="font-size:13px;font-weight:700;margin-bottom:6px;">Experience</h4>
+      <p id="profileExperience" style="font-size:13px;color:var(--text-secondary);"></p>
+    </div>
+    <div style="margin-bottom:12px;">
+      <h4 style="font-size:13px;font-weight:700;margin-bottom:6px;">Work History</h4>
+      <div id="profileHistory"></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <h4 style="font-size:13px;font-weight:700;margin-bottom:6px;">Available Time Slots</h4>
+      <div class="time-slots" id="profileSlots"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-bottom:16px;">
+      <div style="text-align:center;flex:1;background:var(--bg-card-soft);padding:12px;border-radius:12px;">
+        <div class="worker-price" id="profileHourly" style="font-size:20px;"></div>
+        <div style="font-size:11px;color:var(--text-muted);">per hour</div>
+      </div>
+      <div style="text-align:center;flex:1;background:var(--bg-card-soft);padding:12px;border-radius:12px;">
+        <div class="worker-price" id="profileDaily" style="font-size:20px;"></div>
+        <div style="font-size:11px;color:var(--text-muted);">per day</div>
+      </div>
+    </div>
+    <button class="btn-book" id="profileBookBtn"><i class="fas fa-calendar-check"></i> Book This Worker</button>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal-content" style="position:relative;">
+    <button class="modal-close" onclick="closeBookingModal()"><i class="fas fa-times"></i></button>
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:4px;"><i class="fas fa-calendar-check"></i> Book Worker</h3>
+    <p id="bookingWorkerName" style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;"></p>
+
+    <div class="booking-step">
+      <label>Select Date</label>
+      <input type="date" id="bookingDate">
+    </div>
+    <div class="booking-step">
+      <label>Start Time</label>
+      <select id="bookingTime">
+        <option value="">Select time...</option>
+        <option value="6:00 AM">6:00 AM</option>
+        <option value="7:00 AM">7:00 AM</option>
+        <option value="8:00 AM">8:00 AM</option>
+        <option value="9:00 AM">9:00 AM</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="1:00 PM">1:00 PM</option>
+        <option value="2:00 PM">2:00 PM</option>
+        <option value="3:00 PM">3:00 PM</option>
+        <option value="4:00 PM">4:00 PM</option>
+        <option value="5:00 PM">5:00 PM</option>
+        <option value="6:00 PM">6:00 PM</option>
+      </select>
+    </div>
+    <div class="booking-step">
+      <label>Number of Hours</label>
+      <input type="number" id="bookingHours" min="1" max="12" value="4" oninput="updateCost()">
+    </div>
+    <div class="booking-step">
+      <label>Work Type</label>
+      <select id="bookingWorkType">
+        <option value="">Select work type...</option>
+        <option value="Rice Harvesting">Rice Harvesting</option>
+        <option value="Wheat Harvesting">Wheat Harvesting</option>
+        <option value="Planting">Planting</option>
+        <option value="Irrigation">Irrigation Work</option>
+        <option value="Crop Spraying">Crop Spraying</option>
+        <option value="Livestock Care">Livestock Care</option>
+        <option value="Equipment Operation">Equipment Operation</option>
+        <option value="General Farm Work">General Farm Work</option>
+      </select>
+    </div>
+    <div class="booking-step">
+      <label>Farm Location</label>
+      <input type="text" id="bookingLocation" placeholder="Enter your farm address...">
+    </div>
+
+    <div class="cost-display">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Estimated Cost</div>
+      <div class="amount" id="bookingCost">₹0</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">4 hrs × ₹0/hr</div>
+    </div>
+
+    <button class="btn-book" onclick="confirmBooking()"><i class="fas fa-check"></i> Confirm Booking</button>
+  </div>
+</div>
+
+<!-- Booking Confirmation Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-content" style="position:relative;">
+    <button class="modal-close" onclick="closeConfirmModal()"><i class="fas fa-times"></i></button>
+    <div class="confirm-success">
+      <i class="fas fa-check-circle"></i>
+      <h3 style="font-size:18px;font-weight:800;margin-bottom:4px;">Booking Confirmed!</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Your worker has been booked successfully</p>
+      <div id="confirmDetails"></div>
+      <button class="btn-book" style="margin-top:16px;" onclick="closeConfirmModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/database.js"></script>
+<script src="js/services.js"></script>
+<script src="js/userStore.js"></script>
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="js/script.js"></script>
+<script>
+const workers = [
+  {
+    id: 1, name: "Mahesh Yadav", type: "Harvest Worker",
+    skills: ["Rice Harvesting", "Wheat Cutting", "Threshing", "Manual Labor"],
+    experience: 8, location: "Nashik", distance: 3,
+    rating: 4.8, reviews: 94, hourly: 120, daily: 800,
+    availability: "available", availableText: "Available Now",
+    color: "#1B5E3F", bio: "Experienced harvest worker with 8 years in rice and wheat fields. Known for efficiency and reliability.",
+    history: [
+      { farm: "Sharma Farms, Nashik", work: "Rice Harvesting", duration: "2 weeks", year: "2025" },
+      { farm: "Patel Agriculture, Pune", work: "Wheat Cutting", duration: "1 week", year: "2025" },
+      { farm: "Desai Estate, Nashik", work: "Threshing", duration: "3 days", year: "2024" }
+    ],
+    slots: ["7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"]
+  },
+  {
+    id: 2, name: "Suresh Kumar", type: "Tractor Operator",
+    skills: ["Tractor Driving", "Ploughing", "Tillage", "Machine Repair"],
+    experience: 12, location: "Indore", distance: 5,
+    rating: 4.6, reviews: 156, hourly: 500, daily: 3000,
+    availability: "busy", availableText: "Available Tomorrow",
+    color: "#5D4037", bio: "Expert tractor operator with 12 years of experience handling all types of farm machinery and equipment.",
+    history: [
+      { farm: "Gupta Agro, Indore", work: "Tractor Ploughing", duration: "5 days", year: "2025" },
+      { farm: "Verma Farms, Bhopal", work: "Land Preparation", duration: "1 week", year: "2025" },
+      { farm: "Raj Farm House, Indore", work: "Tillage Work", duration: "3 days", year: "2024" }
+    ],
+    slots: ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM"]
+  },
+  {
+    id: 3, name: "Priya Devi", type: "Irrigation Worker",
+    skills: ["Drip Irrigation", "Sprinkler Setup", "Canal Work", "Water Management"],
+    experience: 6, location: "Lucknow", distance: 2,
+    rating: 4.9, reviews: 127, hourly: 150, daily: 900,
+    availability: "available", availableText: "Available Now",
+    color: "#1B5E3F", bio: "Irrigation specialist with expertise in modern drip systems and traditional canal management for rice fields.",
+    history: [
+      { farm: "Yadav Farms, Lucknow", work: "Drip Irrigation Setup", duration: "4 days", year: "2025" },
+      { farm: "Singh Estate, Kanpur", work: "Sprinkler Installation", duration: "2 days", year: "2025" },
+      { farm: "Devi Agro, Lucknow", work: "Canal Maintenance", duration: "1 week", year: "2024" }
+    ],
+    slots: ["7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM"]
+  },
+  {
+    id: 4, name: "Ramesh Singh", type: "Crop Spraying",
+    skills: ["Pesticide Spraying", "Fertilizer Application", "Drone Spraying", "Safety Protocols"],
+    experience: 5, location: "Jaipur", distance: 8,
+    rating: 4.3, reviews: 62, hourly: 200, daily: 1200,
+    availability: "busy", availableText: "Busy until Friday",
+    color: "#E65100", bio: "Certified crop spraying professional experienced with both manual and drone-based spraying techniques.",
+    history: [
+      { farm: "Singh Agro, Jaipur", work: "Pesticide Spraying", duration: "3 days", year: "2025" },
+      { farm: "Meena Farms, Ajmer", work: "Fertilizer Application", duration: "2 days", year: "2025" },
+      { farm: "Rajput Estate, Jaipur", work: "Drone Spraying", duration: "1 day", year: "2024" }
+    ],
+    slots: ["6:00 AM", "7:00 AM", "5:00 PM", "6:00 PM"]
+  },
+  {
+    id: 5, name: "Gurbachan Lal", type: "Equipment Operator",
+    skills: ["Harvester Operation", "Thresher", "Baler", "Maintenance"],
+    experience: 15, location: "Amritsar", distance: 4,
+    rating: 4.7, reviews: 203, hourly: 300, daily: 2000,
+    availability: "available", availableText: "Available Now",
+    color: "#283593", bio: "Veteran equipment operator with 15 years running combine harvesters, threshers, and balers across Punjab region.",
+    history: [
+      { farm: "Kaur Farms, Amritsar", work: "Combine Harvesting", duration: "2 weeks", year: "2025" },
+      { farm: "Gill Estate, Ludhiana", work: "Baling Work", duration: "5 days", year: "2025" },
+      { farm: "Singh Agro, Jalandhar", work: "Thresher Operation", duration: "1 week", year: "2024" }
+    ],
+    slots: ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM"]
+  },
+  {
+    id: 6, name: "Meera Bai", type: "Harvest Team Lead",
+    skills: ["Team Management", "Rice Harvesting", "Quality Control", "Labor Coordination"],
+    experience: 10, location: "Raipur", distance: 6,
+    rating: 4.5, reviews: 89, hourly: 180, daily: 1200,
+    availability: "available", availableText: "Available Now",
+    color: "#7B1FA2", bio: "Experienced team lead managing a crew of 8-10 harvest workers. Specializes in quality rice harvesting.",
+    history: [
+      { farm: "Wardha Farms, Raipur", work: "Team Harvesting", duration: "3 weeks", year: "2025" },
+      { farm: "Agarwal Agro, Bilaspur", work: "Quality Supervision", duration: "1 week", year: "2025" },
+      { farm: "Patel Estate, Raipur", work: "Labor Coordination", duration: "2 weeks", year: "2024" }
+    ],
+    slots: ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM"]
+  },
+  {
+    id: 7, name: "Arjun Patel", type: "Livestock Worker",
+    skills: ["Cattle Care", "Milking", "Fodder Management", "Animal Health"],
+    experience: 7, location: "Anand", distance: 3,
+    rating: 4.4, reviews: 73, hourly: 160, daily: 1000,
+    availability: "busy", availableText: "Available Tomorrow",
+    color: "#4E342E", bio: "Dedicated livestock worker experienced in dairy cattle care, milking operations, and basic animal health management.",
+    history: [
+      { farm: "Patel Dairy, Anand", work: "Cattle Care", duration: "6 months", year: "2025" },
+      { farm: "Gujarat Milk Farm", work: "Milking Operations", duration: "3 months", year: "2025" },
+      { farm: "Mehta Dairy, Vadodara", work: "Fodder Management", duration: "2 months", year: "2024" }
+    ],
+    slots: ["6:00 AM", "7:00 AM", "8:00 AM", "4:00 PM", "5:00 PM"]
+  },
+  {
+    id: 8, name: "Sunil Sharma", type: "Farm Equipment",
+    skills: ["Tractor", "Rotavator", "Seed Drill", "GPS Guided Systems"],
+    experience: 9, location: "Karnal", distance: 7,
+    rating: 4.8, reviews: 118, hourly: 250, daily: 1500,
+    availability: "available", availableText: "Available Now",
+    color: "#0D47A1", bio: "Modern farm equipment specialist experienced with GPS-guided tractors and precision farming tools.",
+    history: [
+      { farm: "Sharma Agro, Karnal", work: "Precision Planting", duration: "1 week", year: "2025" },
+      { farm: "Haryana Farms, Panipat", work: "Rotavator Operation", duration: "4 days", year: "2025" },
+      { farm: "Singh Estate, Ambala", work: "Seed Drill Setup", duration: "3 days", year: "2024" }
+    ],
+    slots: ["7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"]
+  }
+];
+
+let currentFilter = "all";
+let currentWorker = null;
+
+function renderWorkers(list) {
+  const grid = document.getElementById("workerGrid");
+  document.getElementById("resultCount").textContent = list.length + " worker" + (list.length !== 1 ? "s" : "") + " found";
+  if (list.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-muted);"><i class="fas fa-search" style="font-size:32px;margin-bottom:8px;display:block;"></i>No workers found matching your criteria.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(w => `
+    <div class="worker-card" onclick="openProfileModal(${w.id})">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="worker-avatar" style="background:${w.color};flex-shrink:0;"><i class="fas fa-user"></i></div>
+        <div style="flex:1;min-width:0;">
+          <div class="worker-name">${w.name}</div>
+          <span class="worker-type-badge">${w.type}</span>
+        </div>
+      </div>
+      <div class="worker-skills">${w.skills.map(s => '<span class="worker-skill-tag">' + s + '</span>').join('')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <div class="worker-rating"><i class="fas fa-star"></i> ${w.rating} <span style="color:var(--text-muted);font-weight:400;font-size:11px;">(${w.reviews})</span></div>
+        <div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-briefcase"></i> ${w.experience}yr</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+        <div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${w.location} (${w.distance}km)</div>
+        <span class="worker-availability ${w.availability === 'available' ? 'available' : 'busy'}">
+          <span class="worker-availability-dot"></span> ${w.availableText}
+        </span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <span class="worker-price">₹${w.hourly}<small>/hr</small></span>
+        <span class="worker-price">₹${w.daily.toLocaleString()}<small>/day</small></span>
+      </div>
+      <button class="btn-book" style="margin-top:10px;font-size:13px;padding:8px;" onclick="event.stopPropagation();openBookingModal(${w.id})">
+        <i class="fas fa-calendar-check"></i> View Profile & Book
+      </button>
+    </div>
+  `).join("");
+}
+
+function applyFilters() {
+  const search = document.getElementById("searchInput").value.toLowerCase().trim();
+  const sort = document.getElementById("sortSelect").value;
+  let filtered = workers.filter(w => {
+    if (currentFilter === "available") return w.availability === "available";
+    if (currentFilter !== "all") {
+      const filterMap = {
+        "Harvesting": ["Harvest Worker", "Harvest Team Lead"],
+        "Planting": ["Tractor Operator", "Farm Equipment"],
+        "Irrigation": ["Irrigation Worker"],
+        "Livestock": ["Livestock Worker"],
+        "Equipment": ["Equipment Operator", "Farm Equipment"]
+      };
+      if (!filterMap[currentFilter] || !filterMap[currentFilter].includes(w.type)) return false;
+    }
+    if (search) {
+      const haystack = (w.name + " " + w.type + " " + w.skills.join(" ") + " " + w.location).toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    return true;
+  });
+
+  if (sort === "price-low") filtered.sort((a, b) => a.hourly - b.hourly);
+  else if (sort === "highest-rated") filtered.sort((a, b) => b.rating - a.rating);
+  else if (sort === "nearest") filtered.sort((a, b) => a.distance - b.distance);
+  else if (sort === "available-now") filtered.sort((a, b) => (a.availability === "available" ? 0 : 1) - (b.availability === "available" ? 0 : 1));
+
+  renderWorkers(filtered);
+}
+
+function setFilter(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  applyFilters();
+}
+
+function openProfileModal(id) {
+  const w = workers.find(x => x.id === id);
+  if (!w) return;
+  currentWorker = w;
+  document.getElementById("profileAvatar").style.background = `linear-gradient(135deg, ${w.color}, ${w.color}88)`;
+  document.getElementById("profileName").textContent = w.name;
+  document.getElementById("profileType").textContent = w.type;
+  document.getElementById("profileBio").textContent = w.bio;
+  document.getElementById("profileRating").innerHTML = '<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>' + w.rating + '</span> <span style="color:var(--text-muted);font-weight:400;">(' + w.reviews + ' reviews)</span>';
+  document.getElementById("profileSkills").innerHTML = w.skills.map(s => '<span class="worker-skill-tag">' + s + '</span>').join("");
+  document.getElementById("profileExperience").textContent = w.experience + " years of professional experience. Based in " + w.location + ", " + w.distance + " km from your farm.";
+  document.getElementById("profileHistory").innerHTML = w.history.map(h => '<div class="history-entry"><div style="font-size:13px;font-weight:600;">' + h.farm + '</div><div style="font-size:12px;color:var(--text-secondary);">' + h.work + ' &middot; ' + h.duration + ' &middot; ' + h.year + '</div></div>').join("");
+  document.getElementById("profileSlots").innerHTML = w.slots.map(s => '<div class="time-slot">' + s + '</div>').join("");
+  document.getElementById("profileHourly").textContent = "₹" + w.hourly;
+  document.getElementById("profileDaily").textContent = "₹" + w.daily.toLocaleString();
+  document.getElementById("profileBookBtn").onclick = function() { closeProfileModal(); openBookingModal(id); };
+  document.getElementById("profileModal").classList.add("active");
+}
+
+function closeProfileModal() {
+  document.getElementById("profileModal").classList.remove("active");
+}
+
+function openBookingModal(id) {
+  const w = workers.find(x => x.id === id);
+  if (!w) return;
+  currentWorker = w;
+  document.getElementById("bookingWorkerName").textContent = w.name + " — " + w.type + " — ₹" + w.hourly + "/hr";
+  document.getElementById("bookingDate").value = "";
+  document.getElementById("bookingTime").value = "";
+  document.getElementById("bookingHours").value = 4;
+  document.getElementById("bookingWorkType").value = "";
+  document.getElementById("bookingLocation").value = "";
+  document.getElementById("bookingCost").textContent = "₹0";
+  document.getElementById("bookingModal").classList.add("active");
+}
+
+function closeBookingModal() {
+  document.getElementById("bookingModal").classList.remove("active");
+}
+
+function updateCost() {
+  if (!currentWorker) return;
+  const hours = parseInt(document.getElementById("bookingHours").value) || 0;
+  const cost = hours * currentWorker.hourly;
+  document.getElementById("bookingCost").textContent = "₹" + cost.toLocaleString();
+  document.getElementById("bookingCost").nextElementSibling.textContent = hours + " hrs × ₹" + currentWorker.hourly + "/hr";
+}
+
+function confirmBooking() {
+  if (!currentWorker) return;
+  const date = document.getElementById("bookingDate").value;
+  const time = document.getElementById("bookingTime").value;
+  const hours = parseInt(document.getElementById("bookingHours").value) || 0;
+  const workType = document.getElementById("bookingWorkType").value;
+  const location = document.getElementById("bookingLocation").value;
+
+  if (!date || !time || hours < 1 || !workType || !location) {
+    alert("Please fill all fields before confirming.");
+    return;
+  }
+
+  const cost = hours * currentWorker.hourly;
+  const bookingId = "WB-" + Date.now().toString(36).toUpperCase();
+
+  const booking = {
+    id: bookingId,
+    workerId: currentWorker.id,
+    workerName: currentWorker.name,
+    workerType: currentWorker.type,
+    date: date,
+    time: time,
+    hours: hours,
+    workType: workType,
+    location: location,
+    cost: cost,
+    createdAt: new Date().toISOString()
+  };
+
+  let bookings = JSON.parse(localStorage.getItem("fa-worker-bookings") || "[]");
+  bookings.push(booking);
+  localStorage.setItem("fa-worker-bookings", JSON.stringify(bookings));
+
+  closeBookingModal();
+  openConfirmModal(booking);
+}
+
+function openConfirmModal(booking) {
+  document.getElementById("confirmDetails").innerHTML = `
+    <div class="confirm-detail"><span>Worker</span><span style="font-weight:600;">${booking.workerName}</span></div>
+    <div class="confirm-detail"><span>Date</span><span style="font-weight:600;">${booking.date}</span></div>
+    <div class="confirm-detail"><span>Time</span><span style="font-weight:600;">${booking.time}</span></div>
+    <div class="confirm-detail"><span>Duration</span><span style="font-weight:600;">${booking.hours} hours</span></div>
+    <div class="confirm-detail"><span>Work Type</span><span style="font-weight:600;">${booking.workType}</span></div>
+    <div class="confirm-detail"><span>Amount</span><span style="font-weight:700;color:var(--primary-green);">₹${booking.cost.toLocaleString()}</span></div>
+    <div class="confirm-detail" style="border:none;"><span>Booking ID</span><span style="font-weight:700;">${booking.id}</span></div>
+  `;
+  document.getElementById("confirmModal").classList.add("active");
+}
+
+function closeConfirmModal() {
+  document.getElementById("confirmModal").classList.remove("active");
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  applyFilters();
+  document.querySelectorAll(".modal-overlay").forEach(m => {
+    m.addEventListener("click", function(e) {
+      if (e.target === m) m.classList.remove("active");
+    });
+  });
+});
+</script>
+</body>
+</html>

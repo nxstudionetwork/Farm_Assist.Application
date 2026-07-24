@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Expert Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <section class="card-premium" style="background:var(--gradient-primary); color:var(--white);">
+      <h2 style="color:var(--white); font-size:22px; margin-bottom:8px;">Expert Hub</h2>
+      <p style="color:rgba(255,255,255,0.8); font-size:13px; margin-bottom:15px;">Consult registered experts for crop advice, veterinary diagnostics, and soil health.</p>
+      <div style="display:flex; gap:10px;">
+        <input type="text" id="expert-search" placeholder="Search experts by name or specialty..." class="form-input" style="flex:1; padding:12px; font-size:13px; border-radius:12px;">
+        <button class="btn-primary" style="background:var(--white); color:var(--primary-dark-green); padding:12px 18px; border-radius:12px;" onclick="filterExperts()"><i class="fas fa-search"></i></button>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:15px 12px;">
+      <h3 style="font-size:16px; margin-left:12px; margin-bottom:15px;"><i class="fas fa-users-cog" style="color:var(--premium-green); margin-right:8px;"></i> Verified Expert Roster</h3>
+      <div id="experts-list-container" class="experts-list"></div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

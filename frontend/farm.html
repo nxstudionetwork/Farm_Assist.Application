@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Farm Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Farm Management</span>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <h1><i class="fas fa-tractor" style="color:var(--premium-green); margin-right:8px;"></i> Farm Management</h1>
+      <p style="font-size:13px; color:var(--text-secondary);">Manage plots, crops, and journal entries across your farm.</p>
+    </section>
+
+    <!-- Quick Action Buttons -->
+    <div class="page-action-bar" role="toolbar" aria-label="Farm quick actions">
+      <span class="pab-title">Manage</span>
+      <button class="pab-btn primary" onclick="window.location.href='seeds.html'"><i class="fas fa-plus"></i> Add Plot</button>
+      <button class="pab-btn" onclick="window.location.href='seeds.html'"><i class="fas fa-seedling"></i> Add Crop</button>
+      <button class="pab-btn" onclick="window.location.href='finance.html'"><i class="fas fa-receipt"></i> Record Expense</button>
+      <button class="pab-btn" onclick="window.location.href='water.html'"><i class="fas fa-droplet"></i> Add Irrigation</button>
+      <button class="pab-btn" onclick="window.location.href='workers.html'"><i class="fas fa-user-plus"></i> Add Worker</button>
+    </div>
+
+    <!-- Land Mapping (NDVI Overlays) -->
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-map-marked-alt" style="color:var(--premium-green); margin-right:8px;"></i> Land Mapping (NDVI Overlays)</h2>
+      <div class="map-card">
+        <div class="map-canvas">
+          <div class="map-overlay-ndvi"></div>
+          <div class="map-pins pin-a">Plot A (89% Health)</div>
+          <div class="map-pins pin-b">Plot B (70% Health)</div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> NDVI Index derived via Sentinel-2 Satellite models.</span>
+        <button class="btn-secondary" style="padding:8px 14px; font-size:12px; border-radius:12px;" onclick="showToast('Recalibrating overlay indices...','info')">Recalibrate</button>
+      </div>
+    </section>
+
+    <!-- Farm Plots Grid -->
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-th-large" style="color:var(--premium-green); margin-right:8px;"></i> Farm Plots Grid</h2>
+      <div id="farm-plots-container" class="plots-grid">
+        <!-- Loaded via JS -->
+      </div>
+    </section>
+
+    <!-- Digital Farm Journal -->
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-book-open" style="color:var(--premium-green); margin-right:8px;"></i> Digital Farm Journal</h2>
+
+      <!-- New Journal Form -->
+      <form id="journal-form" style="margin-bottom:20px;">
+        <div class="form-group">
+          <label class="form-label" for="journal-plot">Select Plot</label>
+          <select class="form-input" id="journal-plot" style="background-image:none;">
+            <option value="Plot A">Plot A - North Area (Rice)</option>
+            <option value="Plot B">Plot B - East Area (Cotton)</option>
+            <option value="Plot C">Plot C - South Area (Maize)</option>
+            <option value="Plot D">Plot D - West Area (Vegetables)</option>
+            <option value="Plot E">Plot E - Central Area (Wheat)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="journal-activity">Activity Log Name</label>
+          <input type="text" class="form-input" id="journal-activity" placeholder="e.g. Added Nitrogen fertilizer, Tilling" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="journal-notes">Notes / Observations</label>
+          <textarea class="form-input" id="journal-notes" rows="2" placeholder="e.g. Leaves turning yellow, moisture index is lower than standard crop rules."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;">
+          <i class="fas fa-plus"></i> Record Log Entry
+        </button>
+      </form>
+
+      <!-- Journal Timeline -->
+      <h3 style="font-size:14px; margin-bottom:10px;">Journal Log History</h3>
+      <div id="journal-timeline">
+        <div class="alert-strip info" style="border-left-color: var(--premium-green);">
+          <div class="alert-content">
+            <i class="fas fa-book-open" style="color:var(--premium-green); margin-right:8px;"></i>
+            <div>
+              <strong>Plot C: Organic Fertilizer Application</strong>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Added 10kg/acre of organic booster as recommended by AI pathfinder.</div>
+            </div>
+          </div>
+          <span class="alert-time">Yesterday</span>
+        </div>
+        <div class="alert-strip info" style="border-left-color: var(--premium-green);">
+          <div class="alert-content">
+            <i class="fas fa-book-open" style="color:var(--premium-green); margin-right:8px;"></i>
+            <div>
+              <strong>Plot A: Sowing Completed</strong>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Finished seedling placement in Plot A sector 3. Drip emitter setup validated.</div>
+            </div>
+          </div>
+          <span class="alert-time">3 days ago</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expenses & Yield Records -->
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-file-invoice-dollar" style="color:var(--premium-green); margin-right:8px;"></i> Expenses & Yield Records</h2>
+
+      <div style="margin-bottom:15px; display:flex; gap:10px;">
+        <button class="btn-secondary active" style="flex:1; padding:10px; font-size:13px; border-radius:12px;" onclick="showToast('Yield history filtered','info')">Yield Records</button>
+        <button class="btn-secondary" style="flex:1; padding:10px; font-size:13px; border-radius:12px;" onclick="showToast('Expense history filtered','info')">Expense Logs</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(92,184,92,0.1); color:var(--light-green);"><i class="fas fa-weight-hanging"></i></div>
+          <div>
+            <div class="price-crop">Rice (Basmati) Yield</div>
+            <div style="font-size:9px; color:var(--text-muted);">Plot A Harvested</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">42 Quintals</div>
+          <div style="font-size:11px; color:var(--success);">Season 1 Success</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(92,184,92,0.1); color:var(--light-green);"><i class="fas fa-weight-hanging"></i></div>
+          <div>
+            <div class="price-crop">Maize (Hybrid) Yield</div>
+            <div style="font-size:9px; color:var(--text-muted);">Plot C Harvested</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">38 Quintals</div>
+          <div style="font-size:11px; color:var(--success);">Season 1 Success</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon" style="background:rgba(220,53,69,0.1); color:var(--danger);"><i class="fas fa-shopping-cart"></i></div>
+          <div>
+            <div class="price-crop">Urea & Seeds Order</div>
+            <div style="font-size:9px; color:var(--text-muted);">Marketplace Purchase</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">₹2,900 Expense</div>
+          <div style="font-size:11px; color:var(--text-secondary);">Completed Transaction</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Livestock Registry -->
+    <section class="card-premium">
+      <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-cow" style="color:var(--premium-green); margin-right:8px;"></i> Livestock Registry</h2>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon"><i class="fas fa-cow"></i></div>
+          <div>
+            <div class="price-crop">Dairy Cows (Gir Breed)</div>
+            <div style="font-size:9px; color:var(--text-muted);">Health Check Stable</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">12 Head</div>
+          <div style="font-size:11px; color:var(--success);">Vaccinated</div>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-info">
+          <div class="price-icon"><i class="fas fa-sheep"></i></div>
+          <div>
+            <div class="price-crop">Sheep (Local Breed)</div>
+            <div style="font-size:9px; color:var(--text-muted);">Moisture Exposure Warning</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-crop">22 Head</div>
+          <div style="font-size:11px; color:var(--warning);">Deworm Needed</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

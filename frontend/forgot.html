@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Reset PIN</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body{padding:0;margin:0;background:#f0f7ee;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+    .auth-container{width:100%;min-height:100vh;display:flex;flex-direction:column;background:#fff}
+    @media(min-width:768px){.auth-container{max-width:420px;min-height:auto;border-radius:32px;box-shadow:0 25px 80px rgba(0,0,0,.08);margin:40px auto;overflow:hidden}}
+    .auth-header{background:linear-gradient(135deg,#1a3c2a,#2d5a3e);padding:32px 24px 28px;text-align:center}
+    .auth-header .logo-icon{width:56px;height:56px;background:rgba(255,255,255,.12);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;color:#81c784}
+    .auth-header h1{color:#fff;font-size:22px;font-weight:700;margin:0 0 4px}
+    .auth-header p{color:rgba(255,255,255,.7);font-size:13px;margin:0}
+    .auth-body{padding:24px 24px 32px;flex:1}
+    .step{display:none}.step.active{display:block;animation:fadeUp .3s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .step h2{font-size:17px;color:#1a3c2a;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+    .step p.sub{font-size:12px;color:#7a8f7a;margin:0 0 20px}
+    .form-group{margin-bottom:18px}
+    .form-group label{display:block;font-size:13px;font-weight:600;color:#2d3e2d;margin-bottom:6px}
+    .input-wrap{position:relative}
+    .input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7a9f7a;font-size:15px;pointer-events:none}
+    .input-wrap input{width:100%;padding:13px 14px 13px 42px;border:1.5px solid #e0e8e0;border-radius:12px;font-size:14px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;box-sizing:border-box;font-family:inherit}
+    .input-wrap input:focus{outline:none;border-color:#4caf50;background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
+    .btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#1a3c2a,#2d5a3e);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s ease;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,60,42,.25)}
+    .otp-grid{display:flex;justify-content:center;gap:10px;margin:16px 0}
+    .otp-grid input{width:48px;height:52px;text-align:center;font-size:20px;font-weight:700;border:1.5px solid #e0e8e0;border-radius:12px;background:#fafcfa;color:#1a2e1a;font-family:inherit}
+    .otp-grid input:focus{outline:none;border-color:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
+    .pin-grid{display:flex;justify-content:center;gap:12px;margin:20px 0}
+    .pin-grid input{width:52px;height:58px;text-align:center;font-size:22px;font-weight:700;border:1.5px solid #e0e8e0;border-radius:12px;background:#fafcfa;color:#1a2e1a;font-family:inherit}
+    .pin-grid input:focus{outline:none;border-color:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
+    .hint{text-align:center;font-size:12px;color:#8a9f8a;margin-bottom:20px}
+    .hint strong{color:#2e7d32}
+    .back-link{text-align:center;margin-top:22px;font-size:13px;color:#6a806a}
+    .back-link a{color:#2e7d32;font-weight:600;text-decoration:none}
+    .success-toast,.danger-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:2000;animation:fadeUp .3s ease;display:flex;align-items:center;gap:10px}
+    .success-toast{background:#1a3c2a}.success-toast i{color:#81c784}
+    .danger-toast{background:#c62828}
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="logo-icon"><i class="fas fa-seedling"></i></div>
+      <h1>Reset PIN</h1>
+      <p>We'll help you create a new PIN</p>
+    </div>
+    <div class="auth-body">
+      <div class="step active" id="step-1">
+        <h2><i class="fas fa-phone" style="color:#4caf50;"></i> Verify Phone</h2>
+        <p class="sub">Enter your registered mobile number to receive a verification code.</p>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <div class="input-wrap"><i class="fas fa-phone"></i><input type="text" id="forgot-phone" placeholder="+91 98765 43210" value="+91 98765 43210"></div>
+        </div>
+        <button class="btn-submit" onclick="sendResetOtp()">Send OTP <i class="fas fa-paper-plane"></i></button>
+      </div>
+
+      <div class="step" id="step-2">
+        <h2><i class="fas fa-shield-halved" style="color:#FF9800;"></i> Verify OTP</h2>
+        <p class="sub">Enter the 6-digit code sent to your phone. Use <strong>123456</strong>.</p>
+        <div class="otp-grid">
+          <input type="text" maxlength="1" id="otp-1" oninput="focusOtpNext('otp-1','otp-2')">
+          <input type="text" maxlength="1" id="otp-2" oninput="focusOtpNext('otp-2','otp-3')">
+          <input type="text" maxlength="1" id="otp-3" oninput="focusOtpNext('otp-3','otp-4')">
+          <input type="text" maxlength="1" id="otp-4" oninput="focusOtpNext('otp-4','otp-5')">
+          <input type="text" maxlength="1" id="otp-5" oninput="focusOtpNext('otp-5','otp-6')">
+          <input type="text" maxlength="1" id="otp-6" oninput="focusOtpNext('otp-6',null);verifyResetOtp()">
+        </div>
+        <button class="btn-submit" onclick="verifyResetOtp()">Verify <i class="fas fa-check"></i></button>
+        <p style="text-align:center;margin-top:12px;"><a href="#" onclick="sendResetOtp();return false;" style="color:#2e7d32;font-size:13px;font-weight:600;">Resend OTP</a></p>
+      </div>
+
+      <div class="step" id="step-3">
+        <h2><i class="fas fa-lock" style="color:#4caf50;"></i> Create New PIN</h2>
+        <p class="sub">Create a new 4-digit PIN for your account.</p>
+        <div class="pin-grid">
+          <input type="password" maxlength="1" id="new-pin-1" oninput="focusPinNext('new-pin-1','new-pin-2')">
+          <input type="password" maxlength="1" id="new-pin-2" oninput="focusPinNext('new-pin-2','new-pin-3')">
+          <input type="password" maxlength="1" id="new-pin-3" oninput="focusPinNext('new-pin-3','new-pin-4')">
+          <input type="password" maxlength="1" id="new-pin-4" oninput="focusPinNext('new-pin-4',null)">
+        </div>
+        <p class="hint">Confirm your new PIN</p>
+        <div class="pin-grid">
+          <input type="password" maxlength="1" id="confirm-pin-1" oninput="focusPinNext('confirm-pin-1','confirm-pin-2')">
+          <input type="password" maxlength="1" id="confirm-pin-2" oninput="focusPinNext('confirm-pin-2','confirm-pin-3')">
+          <input type="password" maxlength="1" id="confirm-pin-3" oninput="focusPinNext('confirm-pin-3','confirm-pin-4')">
+          <input type="password" maxlength="1" id="confirm-pin-4" oninput="focusPinNext('confirm-pin-4',null)">
+        </div>
+        <button class="btn-submit" onclick="resetPin()" style="margin-top:16px;">Reset PIN <i class="fas fa-check"></i></button>
+      </div>
+
+      <div class="step" id="step-4">
+        <div style="text-align:center;padding:20px 0;">
+          <div style="width:80px;height:80px;border-radius:50%;background:#e8f5e9;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;"><i class="fas fa-check-circle" style="font-size:40px;color:#4caf50;"></i></div>
+          <h2 style="font-size:20px;margin:0 0 8px;">PIN Reset Successful!</h2>
+          <p style="font-size:13px;color:#7a8f7a;">You can now login with your new PIN.</p>
+          <button class="btn-submit" onclick="window.location.href='login.html'" style="margin-top:20px;">Go to Login <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <div class="back-link">Remember your PIN? <a href="login.html">Back to Login</a></div>
+    </div>
+  </div>
+
+  <script>
+    function showToast(msg, type) {
+      var ex = document.querySelector('.success-toast, .danger-toast');
+      if (ex) ex.remove();
+      var t = document.createElement('div');
+      t.className = type === 'danger' ? 'danger-toast' : 'success-toast';
+      t.innerHTML = '<i class="fas fa-' + (type === 'danger' ? 'exclamation-circle' : 'check-circle') + '"></i> ' + msg;
+      document.body.appendChild(t);
+      setTimeout(function(){ t.remove(); }, 3000);
+    }
+
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+      document.getElementById('step-' + n).classList.add('active');
+    }
+
+    function focusOtpNext(cur, next) {
+      var el = document.getElementById(cur);
+      if (el.value.length === 1 && next) document.getElementById(next).focus();
+    }
+
+    function focusPinNext(cur, next) {
+      var el = document.getElementById(cur);
+      if (el.value.length === 1 && next) document.getElementById(next).focus();
+    }
+
+    function sendResetOtp() {
+      var phone = document.getElementById('forgot-phone').value;
+      if (!phone) { showToast('Enter a mobile number', 'danger'); return; }
+      showToast('OTP sent to ' + phone + ' (Use 123456)', 'success');
+      showStep(2);
+      setTimeout(function(){ document.getElementById('otp-1').focus(); }, 300);
+    }
+
+    function verifyResetOtp() {
+      var otp = '';
+      for (var i = 1; i <= 6; i++) { var el = document.getElementById('otp-' + i); if (el) otp += el.value; }
+      if (otp === '123456') {
+        showToast('OTP verified! Create a new PIN.', 'success');
+        showStep(3);
+      } else if (otp.length === 6) {
+        showToast('Incorrect OTP. Use 123456.', 'danger');
+        for (var i = 1; i <= 6; i++) { var el = document.getElementById('otp-' + i); if (el) el.value = ''; }
+        document.getElementById('otp-1').focus();
+      }
+    }
+
+    function resetPin() {
+      var pin = '', confirm = '';
+      for (var i = 1; i <= 4; i++) { var el = document.getElementById('new-pin-' + i); if (el) pin += el.value; }
+      for (var i = 1; i <= 4; i++) { var el = document.getElementById('confirm-pin-' + i); if (el) confirm += el.value; }
+      if (pin.length !== 4) { showToast('Enter a 4-digit PIN', 'danger'); return; }
+      if (pin !== confirm) { showToast('PINs do not match', 'danger'); return; }
+      localStorage.setItem('fa-user-pin', pin);
+      showToast('PIN reset successfully!', 'success');
+      showStep(4);
+    }
+  </script>
+</body>
+</html>

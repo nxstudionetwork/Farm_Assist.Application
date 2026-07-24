@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Feedback</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .star-rating { display:flex; gap:6px; margin:8px 0; }
+    .star-rating .star { font-size:28px; color:var(--border-medium); cursor:pointer; transition:color 0.2s, transform 0.15s; }
+    .star-rating .star:hover { transform:scale(1.15); }
+    .star-rating .star.active { color:var(--warning); }
+    .star-rating .star.hover { color:#F0C744; }
+    .feedback-history-item { border-bottom:1px solid var(--border-light); padding:14px 0; }
+    .feedback-history-item:last-child { border-bottom:none; }
+    .fb-type-badge { display:inline-block; font-size:10px; font-weight:600; padding:3px 10px; border-radius:20px; background:var(--soft-green); color:var(--primary-green); }
+    .fb-type-badge.problem { background:#FDEAEA; color:var(--danger); }
+    .fb-type-badge.feature { background:var(--sky-soft); color:#1565C0; }
+    .faq-accordion-item { border-bottom:1px solid var(--border-light); padding:14px 0; }
+    .faq-accordion-item:last-child { border-bottom:none; }
+    .faq-accordion-q { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+    .faq-accordion-q h4 { font-size:13px; font-weight:600; }
+    .faq-accordion-a { display:none; font-size:12px; color:var(--text-secondary); margin-top:10px; line-height:1.6; }
+    .empty-fb { text-align:center; padding:30px 20px; color:var(--text-muted); }
+    .empty-fb i { font-size:36px; margin-bottom:12px; }
+  </style>
+</head>
+<body>
+
+  <main class="page-container" style="padding-top:var(--topbar-height);padding-bottom:calc(var(--bottomnav-height)+24px);">
+
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Feedback</span>
+    </nav>
+
+    <div class="page-header">
+      <div>
+        <h1><i class="fas fa-comment-dots" style="color:var(--premium-green); margin-right:8px;"></i> Help us improve Farm Assist</h1>
+        <p>Your feedback shapes the future of this platform</p>
+      </div>
+    </div>
+
+    <section class="card-premium" id="feedback-form-card">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-paper-plane" style="color:var(--premium-green); margin-right:8px;"></i> Submit Feedback</h3>
+      <form id="feedback-form" onsubmit="handleFeedbackSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="fb-type">Feedback Type</label>
+          <select id="fb-type" class="form-input" style="background-image:none;">
+            <option value="Suggestion">Suggestion</option>
+            <option value="Report a Problem">Report a Problem</option>
+            <option value="Feature Request">Feature Request</option>
+            <option value="General Feedback">General Feedback</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div class="star-rating" id="star-rating">
+            <i class="fas fa-star star" data-value="1" onclick="setRating(1)" onmouseenter="hoverRating(1)" onmouseleave="resetHover()"></i>
+            <i class="fas fa-star star" data-value="2" onclick="setRating(2)" onmouseenter="hoverRating(2)" onmouseleave="resetHover()"></i>
+            <i class="fas fa-star star" data-value="3" onclick="setRating(3)" onmouseenter="hoverRating(3)" onmouseleave="resetHover()"></i>
+            <i class="fas fa-star star" data-value="4" onclick="setRating(4)" onmouseenter="hoverRating(4)" onmouseleave="resetHover()"></i>
+            <i class="fas fa-star star" data-value="5" onclick="setRating(5)" onmouseenter="hoverRating(5)" onmouseleave="resetHover()"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fb-message">Your Message</label>
+          <textarea id="fb-message" class="form-input" rows="4" placeholder="Tell us what you think, what's missing, or what could be better..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;"><i class="fas fa-paper-plane" style="margin-right:6px;"></i> Submit Feedback</button>
+      </form>
+    </section>
+
+    <section class="card-premium" id="feedback-history-card">
+      <h3 style="font-size:16px; margin-bottom:5px;"><i class="fas fa-clock-rotate-left" style="color:var(--premium-green); margin-right:8px;"></i> Your Feedback History</h3>
+      <div id="feedback-history-list"></div>
+    </section>
+
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:5px;"><i class="fas fa-circle-question" style="color:var(--premium-green); margin-right:8px;"></i> Frequently Asked Questions</h3>
+      <div class="faq-accordion-item">
+        <div class="faq-accordion-q" onclick="toggleFaqAccordion(1)">
+          <h4>How do I contact support?</h4>
+          <i class="fas fa-chevron-down" id="fb-faq-chevron-1" style="color:var(--premium-gray); transition:transform 0.25s;"></i>
+        </div>
+        <p class="faq-accordion-a" id="fb-faq-a-1">
+          You can reach our support team through the Help & Support page, by emailing support@farmassist.in, or by calling our helpline at 1800-180-1551 (Toll Free). Our team is available Monday to Saturday, 8 AM to 8 PM IST.
+        </p>
+      </div>
+      <div class="faq-accordion-item">
+        <div class="faq-accordion-q" onclick="toggleFaqAccordion(2)">
+          <h4>Where can I find tutorials and guides?</h4>
+          <i class="fas fa-chevron-down" id="fb-faq-chevron-2" style="color:var(--premium-gray); transition:transform 0.25s;"></i>
+        </div>
+        <p class="faq-accordion-a" id="fb-faq-a-2">
+          Head over to the Learning Hub from the main menu. We offer step-by-step video tutorials, written guides, and interactive walkthroughs covering everything from setting up your farm profile to interpreting NDVI satellite maps.
+        </p>
+      </div>
+      <div class="faq-accordion-item">
+        <div class="faq-accordion-q" onclick="toggleFaqAccordion(3)">
+          <h4>How do I report a bug?</h4>
+          <i class="fas fa-chevron-down" id="fb-faq-chevron-3" style="color:var(--premium-gray); transition:transform 0.25s;"></i>
+        </div>
+        <p class="faq-accordion-a" id="fb-faq-a-3">
+          Use the feedback form above and select "Report a Problem" as the type. Include as much detail as possible: what you were doing, what you expected, and what actually happened. Our developers review every report within 48 hours.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    let currentRating = 0;
+
+    function setRating(value) {
+      currentRating = value;
+      updateStars(value);
+    }
+
+    function hoverRating(value) {
+      updateStars(value);
+    }
+
+    function resetHover() {
+      updateStars(currentRating);
+    }
+
+    function updateStars(value) {
+      const stars = document.querySelectorAll('#star-rating .star');
+      stars.forEach(star => {
+        const v = parseInt(star.getAttribute('data-value'));
+        star.classList.toggle('active', v <= value);
+        star.classList.toggle('hover', v <= value && v > currentRating);
+      });
+    }
+
+    function getFeedbackData() {
+      try {
+        return JSON.parse(localStorage.getItem('fa-feedback')) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveFeedbackData(data) {
+      localStorage.setItem('fa-feedback', JSON.stringify(data));
+    }
+
+    function renderFeedbackHistory() {
+      const container = document.getElementById('feedback-history-list');
+      const data = getFeedbackData();
+      if (data.length === 0) {
+        container.innerHTML = '<div class="empty-fb"><i class="fas fa-inbox"></i><p style="font-size:13px;">No feedback submitted yet. Your submissions will appear here.</p></div>';
+        return;
+      }
+      let html = '';
+      data.slice().reverse().forEach(item => {
+        let badgeClass = '';
+        if (item.type === 'Report a Problem') badgeClass = ' problem';
+        else if (item.type === 'Feature Request') badgeClass = ' feature';
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+          starsHtml += '<i class="fas fa-star" style="font-size:11px;color:' + (i <= item.rating ? 'var(--warning)' : 'var(--border-medium)') + ';"></i> ';
+        }
+        html += '<div class="feedback-history-item">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+        html += '<span class="fb-type-badge' + badgeClass + '">' + item.type + '</span>';
+        html += '<span style="font-size:11px;color:var(--text-muted);">' + item.date + '</span>';
+        html += '</div>';
+        html += '<div style="margin-bottom:6px;">' + starsHtml + '</div>';
+        html += '<p style="font-size:12px;color:var(--text-secondary);line-height:1.6;">' + item.message + '</p>';
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    function handleFeedbackSubmit(e) {
+      e.preventDefault();
+      const type = document.getElementById('fb-type').value;
+      const message = document.getElementById('fb-message').value.trim();
+      if (!message) { showToast('Please enter your feedback message.', 'error'); return; }
+      if (currentRating === 0) { showToast('Please select a star rating.', 'error'); return; }
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      const entry = { type: type, rating: currentRating, message: message, date: dateStr, timestamp: now.getTime() };
+      const data = getFeedbackData();
+      data.push(entry);
+      saveFeedbackData(data);
+      showToast('Feedback submitted successfully! Thank you.', 'success');
+      document.getElementById('fb-message').value = '';
+      document.getElementById('fb-type').selectedIndex = 0;
+      currentRating = 0;
+      updateStars(0);
+      renderFeedbackHistory();
+    }
+
+    function toggleFaqAccordion(id) {
+      const answer = document.getElementById('fb-faq-a-' + id);
+      const chevron = document.getElementById('fb-faq-chevron-' + id);
+      if (answer.style.display === 'block') {
+        answer.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+      } else {
+        answer.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    renderFeedbackHistory();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Learning Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <section class="card-premium" style="background:var(--gradient-primary); color:var(--white);">
+      <h2 style="color:var(--white); font-size:22px; margin-bottom:8px;">Learning Center</h2>
+      <p style="color:rgba(255,255,255,0.8); font-size:13px; margin-bottom:15px;">Expand your farming knowledge with expert-led courses.</p>
+      <div id="course-stats" style="display:flex; gap:15px; justify-content:space-around;">
+        <div style="text-align:center;">
+          <div style="font-size:24px; font-weight:700;">0</div>
+          <div style="font-size:10px; opacity:0.8;">Enrolled</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:24px; font-weight:700;">0</div>
+          <div style="font-size:10px; opacity:0.8;">Completed</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:24px; font-weight:700;">0%</div>
+          <div style="font-size:10px; opacity:0.8;">Progress</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:15px 12px;">
+      <h3 style="font-size:16px; margin-left:12px; margin-bottom:15px;"><i class="fas fa-book-open" style="color:var(--premium-green); margin-right:8px;"></i> Available Courses</h3>
+      <div id="courses-list-container" class="courses-list" style="display:grid; gap:15px;"></div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>Farm Assist - Settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Settings</span>
+    </nav>
+    <div class="page-header">
+      <div>
+        <h1>Settings</h1>
+        <p>Manage your account, preferences, and privacy</p>
+      </div>
+    </div>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-user" style="color:var(--premium-green);"></i> Account</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-user"></i><div><div class="settings-title">Name</div><div class="settings-subtitle" data-user="fullName">Farmer</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-envelope"></i><div><div class="settings-title">Email</div><div class="settings-subtitle">farmer@example.com</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-phone"></i><div><div class="settings-title">Phone</div><div class="settings-subtitle">+91 98765 43210</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-lock"></i><div><div class="settings-title">Password</div><div class="settings-subtitle">Last changed 30 days ago</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-palette" style="color:var(--premium-green);"></i> Appearance</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-moon"></i><div><div class="settings-title">Theme</div><div class="settings-subtitle">Light</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-language"></i><div><div class="settings-title">Language</div><div class="settings-subtitle">English (India)</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-bell" style="color:var(--premium-green);"></i> Notifications</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-cloud-sun"></i><div><div class="settings-title">Weather Alerts</div><div class="settings-subtitle">Rain, storm, heatwave warnings</div></div></div>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-bug"></i><div><div class="settings-title">Pest Advisories</div><div class="settings-subtitle">Local pest outbreak alerts</div></div></div>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-chart-line"></i><div><div class="settings-title">Market Prices</div><div class="settings-subtitle">Mandi price fluctuations</div></div></div>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-newspaper"></i><div><div class="settings-title">Scheme Updates</div><div class="settings-subtitle">New govt schemes & deadlines</div></div></div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-users"></i><div><div class="settings-title">Community Activity</div><div class="settings-subtitle">Replies & mentions</div></div></div>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-universal-access" style="color:var(--premium-green);"></i> Accessibility</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-text-size"></i><div><div class="settings-title">Large Text</div><div class="settings-subtitle">Increase font size</div></div></div>
+          <label class="switch"><input type="checkbox" id="large-text-toggle"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-eye"></i><div><div class="settings-title">High Contrast</div><div class="settings-subtitle">Enhanced color contrast</div></div></div>
+          <label class="switch"><input type="checkbox" id="high-contrast-toggle"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-person-walking"></i><div><div class="settings-title">Reduced Motion</div><div class="settings-subtitle">Minimize animations</div></div></div>
+          <label class="switch"><input type="checkbox" id="reduced-motion-toggle"><span class="slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-database" style="color:var(--premium-green);"></i> Data & Privacy</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row" onclick="showToast('Exporting your farm data...','info')">
+          <div class="settings-row-left"><i class="fas fa-arrow-up-from-bracket"></i><div><div class="settings-title">Export Data</div><div class="settings-subtitle">Download all your farm data</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row" onclick="if(confirm('Clear all local data? This cannot be undone.')){showToast('Clearing local data...','info');}">
+          <div class="settings-row-left"><i class="fas fa-trash-can" style="color:var(--danger);"></i><div><div class="settings-title" style="color:var(--danger);">Clear Data</div><div class="settings-subtitle">Cache, history, saved searches</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium" style="padding:5px 0;">
+      <h2 style="font-size:16px; padding:15px 20px 5px;"><i class="fas fa-info-circle" style="color:var(--premium-green);"></i> About</h2>
+      <div class="settings-list" style="box-shadow:none; border:none; margin-bottom:0;">
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-rotate"></i><div><div class="settings-title">Version</div><div class="settings-subtitle">2.4.1 (Build 2026.07)</div></div></div>
+          <span class="badge badge-green">Latest</span>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-file-contract"></i><div><div class="settings-title">Terms of Service</div><div class="settings-subtitle">Privacy & platform guidelines</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-left"><i class="fas fa-shield-halved"></i><div><div class="settings-title">Privacy Policy</div><div class="settings-subtitle">How we handle your data</div></div></div>
+          <i class="fas fa-chevron-right" style="color:var(--premium-gray);"></i>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

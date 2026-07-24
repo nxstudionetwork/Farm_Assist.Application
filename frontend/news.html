@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - News Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1><i class="fas fa-newspaper"></i> Agri News</h1>
+    </div>
+
+    <!-- Search Bar -->
+    <div style="padding:0 0 15px;">
+      <div style="display:flex; gap:10px; align-items:center; background:var(--card-bg); padding:8px 14px; border-radius:12px; border:1px solid var(--border);">
+        <i class="fas fa-search" style="color:var(--text-secondary);"></i>
+        <input type="text" id="news-search" placeholder="Search news articles..." style="flex:1; border:none; outline:none; background:transparent; font-size:14px; color:var(--text);">
+        <button style="background:none; border:none; color:var(--premium-green); cursor:pointer;"><i class="fas fa-sliders-h"></i></button>
+      </div>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="category-slider">
+      <button class="category-chip active" data-filter="all">All News</button>
+      <button class="category-chip" data-filter="technology">Technology</button>
+      <button class="category-chip" data-filter="market">Market Trends</button>
+      <button class="category-chip" data-filter="government">Schemes</button>
+      <button class="category-chip" data-filter="weather">Weather Alerts</button>
+      <button class="category-chip" data-filter="agri">Agri Insights</button>
+    </div>
+
+    <!-- Article Count -->
+    <div style="font-size:12px; color:var(--text-secondary); padding:8px 4px;">
+      <span id="article-count">Showing 0 articles</span>
+    </div>
+
+    <!-- News Articles Grid -->
+    <section class="card-premium" style="padding:15px 12px;">
+      <h2 style="font-size:18px; margin-left:12px; margin-bottom:15px;"><i class="fas fa-newspaper" style="color:var(--premium-green); margin-right:8px;"></i> Agriculture News Center</h2>
+      <div id="news-list-container" class="news-list">
+        <!-- Loaded via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Help & Support</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+
+    <section class="hero-dashboard" style="background:var(--gradient-primary); margin-bottom:25px;">
+      <h2><i class="fas fa-headset"></i> Help & Support</h2>
+      <p style="font-size:13px; color:rgba(255,255,255,0.9); margin-top:5px;">
+        Browse visual guides, resolve setup queries, and submit direct feature requests or bug tickets.
+      </p>
+    </section>
+
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:12px;"><i class="fas fa-circle-question" style="color:var(--premium-green); margin-right:8px;"></i> Frequently Asked Questions</h3>
+      <input type="text" class="form-input" id="faq-search" placeholder="Search FAQs..." onkeyup="searchFAQs()" style="margin-bottom:15px; border:1px solid var(--border-light);">
+      <div id="faq-list">
+        <div class="faq-item" style="border-bottom:1px solid var(--border-light); padding:12px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleFAQ(1)">
+            <h4 style="font-size:13px; font-weight:600;" class="faq-q">How does NDVI satellite tracking work?</h4>
+            <i class="fas fa-chevron-down" id="faq-chevron-1"></i>
+          </div>
+          <p id="faq-a-1" style="display:none; font-size:12px; color:var(--text-secondary); margin-top:10px; line-height:1.6;">
+            We pull multispectral data from Sentinel-2 satellites over your farm's coordinate sector. By assessing near-infrared light reflectance, we estimate leaf density and chlorophyll indicators, warning you if values fall.
+          </p>
+        </div>
+        <div class="faq-item" style="border-bottom:1px solid var(--border-light); padding:12px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleFAQ(2)">
+            <h4 style="font-size:13px; font-weight:600;" class="faq-q">Is my financial data stored securely offline?</h4>
+            <i class="fas fa-chevron-down" id="faq-chevron-2"></i>
+          </div>
+          <p id="faq-a-2" style="display:none; font-size:12px; color:var(--text-secondary); margin-top:10px; line-height:1.6;">
+            Yes. All offline ledger entries are held locally in your browser's encrypted LocalStorage index. Once network sync is active, records are pushed to security-hardened cloud clusters.
+          </p>
+        </div>
+        <div class="faq-item" style="border-bottom:1px solid var(--border-light); padding:12px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleFAQ(3)">
+            <h4 style="font-size:13px; font-weight:600;" class="faq-q">How do I verify my digital farmer ID passport?</h4>
+            <i class="fas fa-chevron-down" id="faq-chevron-3"></i>
+          </div>
+          <p id="faq-a-3" style="display:none; font-size:12px; color:var(--text-secondary); margin-top:10px; line-height:1.6;">
+            Navigate to your profile settings, select KYC Verification, and drag-and-drop your land record extraction certificate. Our administrative coordinators verify credentials within 24 hours.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-video" style="color:var(--premium-green); margin-right:8px;"></i> Visual Agronomy Lessons</h3>
+      <div class="reels-container">
+        <div class="reel-thumbnail" onclick="playTutorial('Setting up Drip Irrigation Systems')">
+          <img src="https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?fit=crop&w=120&h=200" alt="Irrigation">
+          <div class="reel-info"><strong>Drip Irrigation Setup</strong><br>3 mins duration</div>
+        </div>
+        <div class="reel-thumbnail" onclick="playTutorial('Soil Acidity (pH) Testing Pass')">
+          <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?fit=crop&w=120&h=200" alt="Soil test">
+          <div class="reel-info"><strong>Soil pH Testing</strong><br>5 mins duration</div>
+        </div>
+        <div class="reel-thumbnail" onclick="playTutorial('Livestock Nutritional Guidelines')">
+          <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?fit=crop&w=120&h=200" alt="Livestock">
+          <div class="reel-info"><strong>Cow Feed Ratio</strong><br>4 mins duration</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-pen-to-square" style="color:var(--premium-green); margin-right:8px;"></i> Contact Support & Feedback</h3>
+      <form id="support-form" onsubmit="handleSupportSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="support-type">Submission Category</label>
+          <select id="support-type" class="form-input" style="background-image:none;">
+            <option value="question">Help Request / Query</option>
+            <option value="bug">Report a System Bug</option>
+            <option value="feature">Suggest a Feature</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="support-msg">Detailed Description</label>
+          <textarea id="support-msg" class="form-input" rows="3" placeholder="Please share as many details as possible..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;">Submit Ticket</button>
+      </form>
+    </section>
+
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:12px;"><i class="fas fa-clock-rotate-left" style="color:var(--premium-green); margin-right:8px;"></i> App Release Notes</h3>
+      <div style="font-size:12px; line-height:1.6; color:var(--text-secondary);">
+        <div style="font-weight:700; color:var(--text-primary);">Version 2.4.0 (Current Release)</div>
+        <div style="margin-bottom:10px;">• Integrated universal Ctrl+K Command Palette search engine.<br>• Expanded offline cache controls and local storage backup services.</div>
+        <div style="font-weight:700; color:var(--text-primary);">Version 2.3.0</div>
+        <div>• Enabled sentinel mapping layers overlays and dairy tracking metrics.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    function toggleFAQ(id) {
+      const p = document.getElementById("faq-a-" + id); const ch = document.getElementById("faq-chevron-" + id);
+      if (p.style.display === "none") { p.style.display = "block"; ch.style.transform = "rotate(180deg)"; }
+      else { p.style.display = "none"; ch.style.transform = "rotate(0deg)"; }
+    }
+    function searchFAQs() {
+      const q = document.getElementById("faq-search").value.toLowerCase();
+      document.querySelectorAll(".faq-item").forEach(item => {
+        item.style.display = item.querySelector(".faq-q").textContent.toLowerCase().includes(q) ? "block" : "none";
+      });
+    }
+    function playTutorial(title) { showToast("Streaming HD tutorial: " + title, "success"); }
+    function handleSupportSubmit(e) {
+      e.preventDefault(); showToast("Support Ticket (" + document.getElementById("support-type").value + ") submitted successfully!", "success"); document.getElementById("support-msg").value = "";
+    }
+  </script>
+</body>
+</html>

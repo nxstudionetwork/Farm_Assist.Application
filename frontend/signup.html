@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Create Account</title>
+  <meta name="description" content="5-step farmer onboarding: personal details, identity verification, farm profile, PIN creation, and Digital Farmer ID card.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body{padding:0;margin:0;background:#f0f7ee;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+    .auth-container{width:100%;min-height:100vh;display:flex;flex-direction:column;background:#fff}
+    @media(min-width:768px){.auth-container{max-width:460px;min-height:auto;border-radius:32px;box-shadow:0 25px 80px rgba(0,0,0,.08);margin:30px auto;overflow:hidden}}
+    .auth-header{background:linear-gradient(135deg,#1a3c2a,#2d5a3e);padding:28px 24px 24px;text-align:center;position:relative;overflow:hidden}
+    .auth-header::before{content:'';position:absolute;top:-60%;left:-20%;width:140%;height:140%;background:radial-gradient(circle at 30% 50%,rgba(76,175,80,.15) 0%,transparent 60%)}
+    .auth-header .logo-icon{width:52px;height:52px;background:rgba(255,255,255,.12);border-radius:15px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;color:#81c784;backdrop-filter:blur(8px)}
+    .auth-header h1{color:#fff;font-size:20px;font-weight:700;margin:0 0 3px}
+    .auth-header p{color:rgba(255,255,255,.7);font-size:12.5px;margin:0}
+    .auth-body{padding:22px 24px 30px;flex:1}
+    .progress-track{margin-bottom:24px}
+    .progress-labels{display:flex;justify-content:space-between;font-size:9px;font-weight:700;color:#9aae9a;margin-bottom:8px;letter-spacing:.3px}
+    .progress-labels .lbl.active{color:#2e7d32}
+    .progress-bar-bg{background:#e6efe6;height:6px;border-radius:3px;overflow:hidden}
+    .progress-bar-fill{background:linear-gradient(90deg,#2e7d32,#4caf50);width:20%;height:100%;transition:width .4s ease}
+    .step{display:none;animation:fadeUp .3s ease}
+    .step.active{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .step-title{font-size:17px;color:#1a3c2a;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+    .step-sub{font-size:12px;color:#7a8f7a;margin:0 0 20px}
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:13px;font-weight:600;color:#2d3e2d;margin-bottom:6px}
+    .input-wrap{position:relative}
+    .input-wrap>i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7a9f7a;font-size:15px;pointer-events:none}
+    .input-wrap input,.input-wrap select{width:100%;padding:13px 14px 13px 42px;border:1.5px solid #e0e8e0;border-radius:12px;font-size:14px;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;box-sizing:border-box;font-family:inherit}
+    .input-wrap select{cursor:pointer;-webkit-appearance:none;appearance:none}
+    .input-wrap input:focus,.input-wrap select:focus{outline:none;border-color:#4caf50;background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
+    .input-wrap input::placeholder{color:#a0b8a0}
+    .input-error{border-color:#e57373!important;box-shadow:0 0 0 3px rgba(229,115,115,.12)!important}
+    .field-msg{font-size:11px;color:#d32f2f;margin-top:5px;display:none}
+    .field-msg.show{display:block}
+    .btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#1a3c2a,#2d5a3e);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s ease;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,60,42,.25)}
+    .btn-ghost{padding:14px 18px;background:#f3f7f2;color:#3a5a3a;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:6px}
+    .btn-ghost:hover{background:#e6efe6}
+    .step-nav{display:flex;gap:10px;margin-top:8px}
+    .step-nav .btn-submit{flex:2}
+    .step-nav .btn-ghost{flex:1}
+    .demo-badge{background:#fff3e0;color:#e65100;font-size:10px;font-weight:700;padding:5px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:5px;margin-bottom:14px;border:1px solid #ffe0b2}
+    .aadhaar-display{background:#f9fdf9;border:1.5px dashed #a5d6a7;border-radius:12px;padding:14px;text-align:center;margin-top:10px;display:none}
+    .aadhaar-display .masked{font-size:22px;letter-spacing:4px;font-weight:700;color:#1a3c2a;font-family:'Courier New',monospace}
+    .aadhaar-display .aadhaar-label{font-size:10px;color:#6a806a;margin-top:4px}
+    .verify-btn{margin-top:10px;padding:10px;background:#4caf50;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;display:none;align-items:center;justify-content:center;gap:6px;font-family:inherit;transition:all .2s;width:100%}
+    .verify-btn:hover{background:#388e3c}
+    .verify-btn.verified{background:#2e7d32;pointer-events:none}
+    .pin-container{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+    .pin-box{width:52px;height:58px;border:2px solid #e0e8e0;border-radius:12px;text-align:center;font-size:24px;font-weight:700;background:#fafcfa;color:#1a2e1a;transition:all .2s ease;outline:none;font-family:'Courier New',monospace;caret-color:transparent}
+    .pin-box:focus{border-color:#4caf50;background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.1)}
+    .pin-box.error{border-color:#e57373;box-shadow:0 0 0 3px rgba(229,115,115,.12)}
+    .pin-label-row{text-align:center;font-size:12px;color:#7a8f7a;margin-bottom:10px;font-weight:600}
+    .pin-strength{margin-top:8px;text-align:center}
+    .pin-strength-bar{height:5px;border-radius:3px;background:#e6efe6;overflow:hidden;max-width:200px;margin:0 auto}
+    .pin-strength-fill{height:100%;width:0;transition:all .3s ease;border-radius:3px}
+    .pin-strength-label{font-size:11px;margin-top:4px;font-weight:600;color:#7a8f7a}
+    .review-section{background:#f9fdf9;border:1.5px solid #e0e8e0;border-radius:14px;padding:16px;margin-bottom:14px;position:relative}
+    .review-section-title{font-size:12px;font-weight:700;color:#2e7d32;margin-bottom:10px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.3px}
+    .review-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f4f0}
+    .review-row:last-child{border-bottom:none}
+    .review-row .r-label{font-size:12px;color:#7a8f7a}
+    .review-row .r-value{font-size:13px;font-weight:600;color:#1a2e1a;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .review-edit-btn{position:absolute;top:12px;right:12px;background:none;border:1.5px solid #c8e6c9;color:#2e7d32;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .2s}
+    .review-edit-btn:hover{background:#e8f5e9}
+    .id-card{background:linear-gradient(135deg,#0b3d2e,#1f7a4c);border-radius:18px;padding:22px;color:#fff;text-align:left;position:relative;overflow:hidden;box-shadow:0 12px 34px rgba(11,61,46,.28);margin-bottom:18px}
+    .id-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:rgba(255,255,255,.04);border-radius:50%}
+    .id-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:rgba(255,255,255,.03);border-radius:50%}
+    .id-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+    .id-card-brand{font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px}
+    .id-card-brand small{display:block;font-size:8px;opacity:.7;font-weight:400;margin-top:2px}
+    .id-card-badge{font-size:9px;font-weight:700;color:#ffeb3b;background:rgba(255,255,255,.12);padding:4px 9px;border-radius:7px}
+    .id-card-body{display:flex;align-items:center;gap:14px}
+    .id-card-avatar{width:58px;height:58px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:24px;color:#81c784;flex-shrink:0}
+    .id-card-name{font-size:15px;font-weight:700;margin:0}
+    .id-card-meta{font-size:10.5px;opacity:.85;margin-top:2px}
+    .id-card-verified{font-size:9px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:5px;display:inline-block;margin-top:6px}
+    .id-card-qr{width:50px;height:50px;margin-left:auto;flex-shrink:0}
+    .id-card-footer{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.12);font-size:9px;opacity:.7}
+    .success-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:3000;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+    .success-overlay.show{display:flex}
+    .success-icon{width:80px;height:80px;background:linear-gradient(135deg,#1a3c2a,#2d5a3e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;color:#81c784;margin-bottom:18px;animation:popIn .5s ease}
+    @keyframes popIn{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+    .success-overlay h2{font-size:22px;color:#1a3c2a;margin:0 0 6px}
+    .success-overlay p{font-size:13px;color:#7a8f7a;margin:0 0 4px}
+    .success-overlay .gen-ids{background:#f3f7f2;border-radius:12px;padding:14px 20px;margin-top:16px;display:inline-block}
+    .success-overlay .gen-ids .gen-label{font-size:10px;color:#7a8f7a;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .success-overlay .gen-ids .gen-val{font-size:18px;font-weight:800;color:#2e7d32;font-family:'Courier New',monospace;margin-top:2px}
+    .success-overlay .gen-ids+.gen-ids{margin-left:10px}
+    .success-overlay .gen-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .auth-back-link{text-align:center;margin-top:22px;font-size:13px;color:#6a806a}
+    .auth-back-link a{color:#2e7d32;font-weight:600;text-decoration:none}
+    .auth-back-link a:hover{text-decoration:underline}
+    .success-toast,.danger-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:2000;animation:fadeUp .3s ease;display:flex;align-items:center;gap:10px}
+    .success-toast{background:#1a3c2a}.success-toast i{color:#81c784}
+    .danger-toast{background:#c62828}
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="logo-icon"><i class="fas fa-seedling"></i></div>
+      <h1>Join Farm Assist</h1>
+      <p>Create your Digital Farmer Identity</p>
+    </div>
+    <div class="auth-body">
+      <div class="progress-track">
+        <div class="progress-labels">
+          <span class="lbl active" data-step="1">DETAILS</span>
+          <span class="lbl" data-step="2">IDENTITY</span>
+          <span class="lbl" data-step="3">FARM</span>
+          <span class="lbl" data-step="4">PIN</span>
+          <span class="lbl" data-step="5">REVIEW</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      </div>
+
+      <!-- ==================== STEP 1 — Basic Details ==================== -->
+      <div class="step active" id="step-1">
+        <h2 class="step-title"><i class="fas fa-user-plus" style="color:#4caf50;"></i> Basic Details</h2>
+        <p class="step-sub">Tell us about yourself.</p>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="reg-name" placeholder="e.g. Ramesh Kumar"></div>
+          <div class="field-msg" id="err-name">Please enter your full name.</div>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number *</label>
+          <div class="input-wrap"><i class="fas fa-phone"></i><input type="text" id="reg-phone" placeholder="e.g. 98765 43210" maxlength="12"></div>
+          <div class="field-msg" id="err-phone">Please enter a valid 10-digit mobile number.</div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span style="color:#a0b8a0;font-weight:400;">(optional)</span></label>
+          <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="reg-email" placeholder="e.g. ramesh@farm.com"></div>
+          <div class="field-msg" id="err-email">Please enter a valid email address.</div>
+        </div>
+        <div class="form-group">
+          <label>Preferred Language *</label>
+          <div class="input-wrap"><i class="fas fa-language"></i>
+            <select id="reg-language">
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Marathi">Marathi</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Telugu">Telugu</option>
+              <option value="Kannada">Kannada</option>
+              <option value="Malayalam">Malayalam</option>
+              <option value="Gujarati">Gujarati</option>
+              <option value="Bengali">Bengali</option>
+              <option value="Punjabi">Punjabi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>State *</label>
+          <div class="input-wrap"><i class="fas fa-map-marker-alt"></i>
+            <select id="reg-state">
+              <option value="">Select State</option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+              <option value="Assam">Assam</option>
+              <option value="Bihar">Bihar</option>
+              <option value="Chhattisgarh">Chhattisgarh</option>
+              <option value="Goa">Goa</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Himachal Pradesh">Himachal Pradesh</option>
+              <option value="Jharkhand">Jharkhand</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Madhya Pradesh">Madhya Pradesh</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Manipur">Manipur</option>
+              <option value="Meghalaya">Meghalaya</option>
+              <option value="Mizoram">Mizoram</option>
+              <option value="Nagaland">Nagaland</option>
+              <option value="Odisha">Odisha</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Sikkim">Sikkim</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Tripura">Tripura</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="Uttarakhand">Uttarakhand</option>
+              <option value="West Bengal">West Bengal</option>
+              <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli & Daman and Diu</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+              <option value="Ladakh">Ladakh</option>
+              <option value="Lakshadweep">Lakshadweep</option>
+              <option value="Puducherry">Puducherry</option>
+            </select>
+          </div>
+          <div class="field-msg" id="err-state">Please select your state.</div>
+        </div>
+        <div class="form-group">
+          <label>District *</label>
+          <div class="input-wrap"><i class="fas fa-location-dot"></i><input type="text" id="reg-district" placeholder="e.g. Nashik"></div>
+          <div class="field-msg" id="err-district">Please enter your district.</div>
+        </div>
+        <div class="form-group">
+          <label>Village *</label>
+          <div class="input-wrap"><i class="fas fa-house-chimney"></i><input type="text" id="reg-village" placeholder="e.g. Kalyan"></div>
+          <div class="field-msg" id="err-village">Please enter your village.</div>
+        </div>
+        <button class="btn-submit" onclick="goToStep(2)">Next: Identity <i class="fas fa-chevron-right"></i></button>
+      </div>
+
+      <!-- ==================== STEP 2 — Identity Verification ==================== -->
+      <div class="step" id="step-2">
+        <h2 class="step-title"><i class="fas fa-fingerprint" style="color:#4caf50;"></i> Identity Verification</h2>
+        <p class="step-sub">Link your Aadhaar for a verified Digital Farmer ID.</p>
+        <div class="demo-badge"><i class="fas fa-flask"></i> Demo / Prototype — No data is transmitted</div>
+        <div class="form-group">
+          <label>Aadhaar Number</label>
+          <div class="input-wrap"><i class="fas fa-id-card"></i><input type="text" id="reg-aadhaar" placeholder="XXXX XXXX XXXX" maxlength="14" inputmode="numeric"></div>
+          <div class="field-msg" id="err-aadhaar">Please enter a valid 12-digit Aadhaar number.</div>
+        </div>
+        <div class="aadhaar-display" id="aadhaar-display">
+          <div class="masked" id="aadhaar-masked">XXXX XXXX XXXX</div>
+          <div class="aadhaar-label">Aadhaar Number (masked)</div>
+        </div>
+        <button class="verify-btn" id="verify-aadhaar-btn" onclick="mockVerifyAadhaar()"><i class="fas fa-check-circle"></i> Verify Aadhaar (Mock)</button>
+        <div class="step-nav">
+          <button class="btn-ghost" onclick="goToStep(1)"><i class="fas fa-chevron-left"></i> Back</button>
+          <button class="btn-submit" onclick="goToStep(3)">Next: Farm <i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 3 — Farm Details ==================== -->
+      <div class="step" id="step-3">
+        <h2 class="step-title"><i class="fas fa-tractor" style="color:#4caf50;"></i> Farm Details</h2>
+        <p class="step-sub">Tell us about your farm to personalise recommendations.</p>
+        <div class="form-group">
+          <label>Farm Name</label>
+          <div class="input-wrap"><i class="fas fa-warehouse"></i><input type="text" id="farm-name" placeholder="e.g. Saraswati Organic Estate"></div>
+          <div class="field-msg" id="err-farm-name">Please enter your farm name.</div>
+        </div>
+        <div class="form-group">
+          <label>Farm Location</label>
+          <div class="input-wrap"><i class="fas fa-location-dot"></i><input type="text" id="farm-location" placeholder="e.g. Near river, Kalyan"></div>
+        </div>
+        <div class="form-group" style="display:flex;gap:10px;">
+          <div style="flex:2;">
+            <label>Farm Size</label>
+            <div class="input-wrap"><i class="fas fa-ruler-combined"></i><input type="number" id="farm-size" placeholder="e.g. 12" min="0" step="0.1"></div>
+            <div class="field-msg" id="err-farm-size">Please enter a valid farm size.</div>
+          </div>
+          <div style="flex:1;">
+            <label>&nbsp;</label>
+            <div class="input-wrap"><i class="fas fa-ruler-combined" style="display:none;"></i>
+              <select id="farm-unit" style="padding-left:14px;">
+                <option value="Acres">Acres</option>
+                <option value="Hectares">Hectares</option>
+                <option value="Bigha">Bigha</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Number of Plots</label>
+          <div class="input-wrap"><i class="fas fa-border-all"></i><input type="number" id="farm-plots" placeholder="e.g. 3" min="1" value="1"></div>
+        </div>
+        <div class="form-group">
+          <label>Main Crop</label>
+          <div class="input-wrap"><i class="fas fa-wheat-awn"></i>
+            <select id="farm-crop">
+              <option value="Rice">Rice</option>
+              <option value="Wheat">Wheat</option>
+              <option value="Cotton">Cotton</option>
+              <option value="Maize">Maize</option>
+              <option value="Sugarcane">Sugarcane</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Pulses">Pulses</option>
+              <option value="Soybean">Soybean</option>
+              <option value="Groundnut">Groundnut</option>
+              <option value="Tea">Tea</option>
+              <option value="Coffee">Coffee</option>
+              <option value="Spices">Spices</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Irrigation Type</label>
+          <div class="input-wrap"><i class="fas fa-droplet"></i>
+            <select id="farm-irrigation">
+              <option value="Rain-fed">Rain-fed</option>
+              <option value="Drip">Drip</option>
+              <option value="Sprinkler">Sprinkler</option>
+              <option value="Flood">Flood</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Farming Type</label>
+          <div class="input-wrap"><i class="fas fa-leaf"></i>
+            <select id="farm-type">
+              <option value="Conventional">Conventional</option>
+              <option value="Organic">Organic</option>
+              <option value="Mixed">Mixed</option>
+              <option value="Hydroponic">Hydroponic</option>
+            </select>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-ghost" onclick="goToStep(2)"><i class="fas fa-chevron-left"></i> Back</button>
+          <button class="btn-submit" onclick="goToStep(4)">Next: Create PIN <i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 4 — Create PIN ==================== -->
+      <div class="step" id="step-4">
+        <h2 class="step-title"><i class="fas fa-lock" style="color:#4caf50;"></i> Create Your PIN</h2>
+        <p class="step-sub">Set a 4-digit PIN for quick login. No password needed.</p>
+        <div class="form-group">
+          <div class="pin-label-row"><i class="fas fa-key" style="color:#4caf50;"></i> Enter PIN</div>
+          <div class="pin-container" id="pin-create">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="0">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="1">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="2">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="3">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="pin-label-row"><i class="fas fa-check-double" style="color:#4caf50;"></i> Confirm PIN</div>
+          <div class="pin-container" id="pin-confirm">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="0">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="1">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="2">
+            <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-idx="3">
+          </div>
+          <div class="field-msg" id="err-pin">PINs do not match.</div>
+        </div>
+        <div class="pin-strength">
+          <div class="pin-strength-bar"><div class="pin-strength-fill" id="pin-fill"></div></div>
+          <div class="pin-strength-label" id="pin-label">Enter a 4-digit PIN</div>
+        </div>
+        <div class="step-nav" style="margin-top:20px;">
+          <button class="btn-ghost" onclick="goToStep(3)"><i class="fas fa-chevron-left"></i> Back</button>
+          <button class="btn-submit" onclick="goToStep(5)">Next: Review <i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 5 — Review & Confirm ==================== -->
+      <div class="step" id="step-5">
+        <h2 class="step-title"><i class="fas fa-clipboard-check" style="color:#4caf50;"></i> Review & Confirm</h2>
+        <p class="step-sub">Verify your details before creating your account.</p>
+
+        <div class="id-card" id="preview-id-card">
+          <div class="id-card-top">
+            <div class="id-card-brand"><i class="fas fa-seedling"></i> Farm Assist<small>Digital Farmer Identity</small></div>
+            <span class="id-card-badge"><i class="fas fa-star"></i> PREMIUM</span>
+          </div>
+          <div class="id-card-body">
+            <div class="id-card-avatar"><i class="fas fa-user"></i></div>
+            <div>
+              <h4 class="id-card-name" id="preview-name">Farmer Name</h4>
+              <div class="id-card-meta" id="preview-farmer-id">ID: FA-XX-000000</div>
+              <div class="id-card-meta" id="preview-crop">Crop: Rice</div>
+              <div class="id-card-verified"><i class="fas fa-shield-halved"></i> KYC VERIFIED</div>
+            </div>
+            <div class="id-card-qr">
+              <svg viewBox="0 0 100 100" style="width:100%;height:100%;fill:#fff;">
+                <rect x="5" y="5" width="25" height="25"/><rect x="10" y="10" width="15" height="15" fill="#0b3d2e"/>
+                <rect x="70" y="5" width="25" height="25"/><rect x="75" y="10" width="15" height="15" fill="#0b3d2e"/>
+                <rect x="5" y="70" width="25" height="25"/><rect x="10" y="75" width="15" height="15" fill="#0b3d2e"/>
+                <rect x="40" y="40" width="20" height="20"/><rect x="45" y="45" width="10" height="10" fill="#0b3d2e"/>
+                <rect x="50" y="15" width="10" height="10"/><rect x="15" y="50" width="10" height="10"/>
+                <rect x="70" y="70" width="10" height="15"/><rect x="85" y="80" width="10" height="10"/>
+              </svg>
+            </div>
+          </div>
+          <div class="id-card-footer">
+            <span id="preview-farm-id">Farm: FM-XX-000000</span>
+            <span id="preview-state-footer">State</span>
+          </div>
+        </div>
+
+        <div class="review-section">
+          <button class="review-edit-btn" onclick="goToStep(1)"><i class="fas fa-pen"></i> Edit</button>
+          <div class="review-section-title"><i class="fas fa-user"></i> Personal Details</div>
+          <div class="review-row"><span class="r-label">Full Name</span><span class="r-value" id="rv-name">—</span></div>
+          <div class="review-row"><span class="r-label">Mobile</span><span class="r-value" id="rv-phone">—</span></div>
+          <div class="review-row"><span class="r-label">Email</span><span class="r-value" id="rv-email">—</span></div>
+          <div class="review-row"><span class="r-label">Language</span><span class="r-value" id="rv-lang">—</span></div>
+          <div class="review-row"><span class="r-label">State</span><span class="r-value" id="rv-state">—</span></div>
+          <div class="review-row"><span class="r-label">District</span><span class="r-value" id="rv-district">—</span></div>
+          <div class="review-row"><span class="r-label">Village</span><span class="r-value" id="rv-village">—</span></div>
+        </div>
+
+        <div class="review-section">
+          <button class="review-edit-btn" onclick="goToStep(2)"><i class="fas fa-pen"></i> Edit</button>
+          <div class="review-section-title"><i class="fas fa-fingerprint"></i> Identity</div>
+          <div class="review-row"><span class="r-label">Aadhaar</span><span class="r-value" id="rv-aadhaar">—</span></div>
+          <div class="review-row"><span class="r-label">Status</span><span class="r-value" id="rv-verify-status">—</span></div>
+        </div>
+
+        <div class="review-section">
+          <button class="review-edit-btn" onclick="goToStep(3)"><i class="fas fa-pen"></i> Edit</button>
+          <div class="review-section-title"><i class="fas fa-tractor"></i> Farm Details</div>
+          <div class="review-row"><span class="r-label">Farm Name</span><span class="r-value" id="rv-farm-name">—</span></div>
+          <div class="review-row"><span class="r-label">Location</span><span class="r-value" id="rv-farm-loc">—</span></div>
+          <div class="review-row"><span class="r-label">Size</span><span class="r-value" id="rv-farm-size">—</span></div>
+          <div class="review-row"><span class="r-label">Plots</span><span class="r-value" id="rv-farm-plots">—</span></div>
+          <div class="review-row"><span class="r-label">Main Crop</span><span class="r-value" id="rv-farm-crop">—</span></div>
+          <div class="review-row"><span class="r-label">Irrigation</span><span class="r-value" id="rv-farm-irr">—</span></div>
+          <div class="review-row"><span class="r-label">Farming Type</span><span class="r-value" id="rv-farm-type">—</span></div>
+        </div>
+
+        <div class="review-section">
+          <button class="review-edit-btn" onclick="goToStep(4)"><i class="fas fa-pen"></i> Edit</button>
+          <div class="review-section-title"><i class="fas fa-lock"></i> Security</div>
+          <div class="review-row"><span class="r-label">Login Method</span><span class="r-value">4-Digit PIN</span></div>
+          <div class="review-row"><span class="r-label">PIN Status</span><span class="r-value" style="color:#2e7d32;">Set</span></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn-ghost" onclick="goToStep(4)"><i class="fas fa-chevron-left"></i> Back</button>
+          <button class="btn-submit" onclick="completeRegistration()">Confirm & Create Account <i class="fas fa-check"></i></button>
+        </div>
+      </div>
+
+      <div class="auth-back-link">Already have an account? <a href="login.html">Log In</a></div>
+    </div>
+  </div>
+
+  <!-- ==================== Success Overlay ==================== -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h2>Welcome to Farm Assist!</h2>
+    <p>Your Digital Farmer ID is ready.</p>
+    <div class="gen-row">
+      <div class="gen-ids">
+        <div class="gen-label">Farmer ID</div>
+        <div class="gen-val" id="gen-farmer-id">FA-XX-000000</div>
+      </div>
+      <div class="gen-ids">
+        <div class="gen-label">Farm ID</div>
+        <div class="gen-val" id="gen-farm-id">FM-XX-000000</div>
+      </div>
+    </div>
+    <p style="margin-top:18px;font-size:12px;color:#aaa;">Redirecting to dashboard...</p>
+  </div>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    var currentStep = 1;
+    var totalSteps = 5;
+    var aadhaarVerified = false;
+    var generatedFarmerId = '';
+    var generatedFarmId = '';
+
+    var STATE_CODES = {
+      'Andhra Pradesh':'AP','Arunachal Pradesh':'AR','Assam':'AS','Bihar':'BR','Chhattisgarh':'CG',
+      'Goa':'GA','Gujarat':'GJ','Haryana':'HR','Himachal Pradesh':'HP','Jharkhand':'JH',
+      'Karnataka':'KA','Kerala':'KL','Madhya Pradesh':'MP','Maharashtra':'MH','Manipur':'MN',
+      'Meghalaya':'ML','Mizoram':'MZ','Nagaland':'NL','Odisha':'OD','Punjab':'PB',
+      'Rajasthan':'RJ','Sikkim':'SK','Tamil Nadu':'TN','Telangana':'TS','Tripura':'TR',
+      'Uttar Pradesh':'UP','Uttarakhand':'UK','West Bengal':'WB',
+      'Andaman and Nicobar Islands':'AN','Chandigarh':'CH','Dadra and Nagar Haveli and Daman and Diu':'DD',
+      'Delhi':'DL','Jammu and Kashmir':'JK','Ladakh':'LA','Lakshadweep':'LD','Puducherry':'PY'
+    };
+
+    function genId(prefix) {
+      var code = STATE_CODES[document.getElementById('reg-state').value] || 'XX';
+      var num = '';
+      for (var i = 0; i < 6; i++) num += Math.floor(Math.random() * 10);
+      return prefix + '-' + code + '-' + num;
+    }
+
+    /* ---------- Toast ---------- */
+    function showToast(msg, type) {
+      var ex = document.querySelector('.success-toast, .danger-toast');
+      if (ex) ex.remove();
+      var t = document.createElement('div');
+      t.className = type === 'danger' ? 'danger-toast' : 'success-toast';
+      t.innerHTML = '<i class="fas fa-' + (type === 'danger' ? 'exclamation-circle' : 'check-circle') + '"></i> ' + msg;
+      document.body.appendChild(t);
+      setTimeout(function(){ t.remove(); }, 3000);
+    }
+
+    /* ---------- Step UI ---------- */
+    function setStepUI(step) {
+      currentStep = step;
+      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+      document.getElementById('step-' + step).classList.add('active');
+      document.getElementById('progress-fill').style.width = ((step / totalSteps) * 100) + '%';
+      document.querySelectorAll('.progress-labels .lbl').forEach(function(l){
+        l.classList.toggle('active', parseInt(l.getAttribute('data-step')) <= step);
+      });
+      document.querySelector('.auth-body').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    function showFieldError(inputId, errId, show) {
+      var el = document.getElementById(inputId);
+      var err = document.getElementById(errId);
+      if (el) el.classList.toggle('input-error', show);
+      if (err) err.classList.toggle('show', show);
+    }
+
+    /* ---------- Validation ---------- */
+    function validateStep1() {
+      var ok = true;
+      var name = document.getElementById('reg-name').value.trim();
+      var phone = document.getElementById('reg-phone').value.trim();
+      var state = document.getElementById('reg-state').value;
+      var district = document.getElementById('reg-district').value.trim();
+      var village = document.getElementById('reg-village').value.trim();
+      showFieldError('reg-name','err-name',!name); if(!name) ok=false;
+      var digits = (phone.match(/\d/g)||[]).length;
+      showFieldError('reg-phone','err-phone',digits<10); if(digits<10) ok=false;
+      var email = document.getElementById('reg-email').value.trim();
+      var emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      showFieldError('reg-email','err-email',!emailOk); if(!emailOk) ok=false;
+      showFieldError('reg-state','err-state',!state); if(!state) ok=false;
+      showFieldError('reg-district','err-district',!district); if(!district) ok=false;
+      showFieldError('reg-village','err-village',!village); if(!village) ok=false;
+      return ok;
+    }
+
+    function validateStep2() {
+      var aadhaar = document.getElementById('reg-aadhaar').value.replace(/\s/g,'');
+      if (aadhaar.length > 0 && aadhaar.length < 12) {
+        showFieldError('reg-aadhaar','err-aadhaar',true);
+        return false;
+      }
+      if (aadhaar.length === 12 && !aadhaarVerified) {
+        showToast('Please verify your Aadhaar first.', 'danger');
+        return false;
+      }
+      return true;
+    }
+
+    function validateStep3() {
+      var ok = true;
+      var name = document.getElementById('farm-name').value.trim();
+      var size = document.getElementById('farm-size').value;
+      showFieldError('farm-name','err-farm-name',!name); if(!name) ok=false;
+      var sizeOk = size && parseFloat(size) > 0;
+      showFieldError('farm-size','err-farm-size',!sizeOk); if(!sizeOk) ok=false;
+      return ok;
+    }
+
+    function validateStep4() {
+      var pin = getPin('pin-create');
+      var confirm = getPin('pin-confirm');
+      var errEl = document.getElementById('err-pin');
+      if (pin.length < 4) {
+        errEl.textContent = 'Please enter all 4 digits.';
+        errEl.classList.add('show');
+        markPinBoxes('pin-create', true);
+        return false;
+      }
+      if (pin !== confirm) {
+        errEl.textContent = 'PINs do not match.';
+        errEl.classList.add('show');
+        markPinBoxes('pin-confirm', true);
+        return false;
+      }
+      if (/^(\d)\1{3}$/.test(pin)) {
+        errEl.textContent = 'PIN cannot be all same digits.';
+        errEl.classList.add('show');
+        return false;
+      }
+      errEl.classList.remove('show');
+      markPinBoxes('pin-create', false);
+      markPinBoxes('pin-confirm', false);
+      return true;
+    }
+
+    function getPin(containerId) {
+      var boxes = document.querySelectorAll('#' + containerId + ' .pin-box');
+      var pin = '';
+      boxes.forEach(function(b){ pin += b.value; });
+      return pin;
+    }
+
+    function markPinBoxes(containerId, hasError) {
+      document.querySelectorAll('#' + containerId + ' .pin-box').forEach(function(b){
+        b.classList.toggle('error', hasError);
+      });
+    }
+
+    function goToStep(step) {
+      if (step > currentStep) {
+        for (var s = currentStep; s < step; s++) {
+          if (s === 1 && !validateStep1()) { showToast('Please fix the highlighted fields.', 'danger'); return; }
+          if (s === 2 && !validateStep2()) { showToast('Please fix the highlighted fields.', 'danger'); return; }
+          if (s === 3 && !validateStep3()) { showToast('Please fix the highlighted fields.', 'danger'); return; }
+          if (s === 4 && !validateStep4()) { showToast('Please fix the highlighted fields.', 'danger'); return; }
+        }
+      }
+      if (step === 5) populateReview();
+      setStepUI(step);
+    }
+
+    /* ---------- Aadhaar Formatting ---------- */
+    document.getElementById('reg-aadhaar').addEventListener('input', function(e) {
+      var raw = this.value.replace(/\D/g, '').substring(0, 12);
+      var formatted = '';
+      for (var i = 0; i < raw.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += raw[i];
+      }
+      this.value = formatted;
+      var display = document.getElementById('aadhaar-display');
+      var masked = document.getElementById('aadhaar-masked');
+      var verifyBtn = document.getElementById('verify-aadhaar-btn');
+      if (raw.length === 12) {
+        display.style.display = 'block';
+        masked.textContent = 'XXXX XXXX ' + raw.substring(8);
+        verifyBtn.style.display = 'flex';
+        if (aadhaarVerified) {
+          verifyBtn.classList.add('verified');
+          verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verified';
+        } else {
+          verifyBtn.classList.remove('verified');
+          verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify Aadhaar (Mock)';
+        }
+        showFieldError('reg-aadhaar','err-aadhaar',false);
+      } else {
+        display.style.display = 'none';
+        verifyBtn.style.display = 'none';
+        aadhaarVerified = false;
+      }
+    });
+
+    function mockVerifyAadhaar() {
+      var btn = document.getElementById('verify-aadhaar-btn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+      btn.style.pointerEvents = 'none';
+      setTimeout(function() {
+        aadhaarVerified = true;
+        btn.classList.add('verified');
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Verified Successfully';
+        showFieldError('reg-aadhaar','err-aadhaar',false);
+        showToast('Aadhaar verified (mock).', 'success');
+      }, 1200);
+    }
+
+    /* ---------- PIN Boxes Logic ---------- */
+    function initPinBoxes(containerId) {
+      var boxes = document.querySelectorAll('#' + containerId + ' .pin-box');
+      boxes.forEach(function(box, idx) {
+        box.addEventListener('input', function() {
+          this.value = this.value.replace(/\D/g, '');
+          if (this.value && idx < boxes.length - 1) {
+            boxes[idx + 1].focus();
+          }
+          updatePinStrength();
+        });
+        box.addEventListener('keydown', function(e) {
+          if (e.key === 'Backspace' && !this.value && idx > 0) {
+            boxes[idx - 1].focus();
+            boxes[idx - 1].value = '';
+          }
+        });
+        box.addEventListener('focus', function() { this.select(); });
+      });
+    }
+
+    function updatePinStrength() {
+      var pin = getPin('pin-create');
+      var fill = document.getElementById('pin-fill');
+      var label = document.getElementById('pin-label');
+      var score = 0;
+      if (pin.length === 4) score++;
+      if (!/^(\d)\1{3}$/.test(pin)) score++;
+      var distinct = (pin.split('').filter(function(v,i,a){ return a.indexOf(v)===i; }).length);
+      if (distinct >= 3) score++;
+      if (distinct === 4) score++;
+      var pct = [0, 30, 55, 80, 100][score];
+      var colors = ['#e6efe6', '#e57373', '#ffb74d', '#aed581', '#4caf50'];
+      var texts = ['Enter a 4-digit PIN', 'Weak', 'Fair', 'Good', 'Strong'];
+      fill.style.width = pct + '%';
+      fill.style.background = colors[score];
+      label.textContent = texts[score];
+      label.style.color = score >= 3 ? '#2e7d32' : (score >= 1 ? '#8a7a4a' : '#7a8f7a');
+      document.getElementById('err-pin').classList.remove('show');
+      markPinBoxes('pin-create', false);
+      markPinBoxes('pin-confirm', false);
+    }
+
+    initPinBoxes('pin-create');
+    initPinBoxes('pin-confirm');
+
+    /* ---------- Populate Review ---------- */
+    function populateReview() {
+      generatedFarmerId = genId('FA');
+      generatedFarmId = genId('FM');
+      var name = document.getElementById('reg-name').value.trim();
+      var phone = document.getElementById('reg-phone').value.trim();
+      var email = document.getElementById('reg-email').value.trim() || '—';
+      var lang = document.getElementById('reg-language').value;
+      var state = document.getElementById('reg-state').value;
+      var district = document.getElementById('reg-district').value.trim();
+      var village = document.getElementById('reg-village').value.trim();
+      var aadhaarRaw = document.getElementById('reg-aadhaar').value.replace(/\s/g,'');
+      var aadhaarDisp = aadhaarRaw.length === 12
+        ? 'XXXX XXXX ' + aadhaarRaw.substring(8)
+        : '—';
+      var farmName = document.getElementById('farm-name').value.trim();
+      var farmLoc = document.getElementById('farm-location').value.trim() || '—';
+      var farmSize = document.getElementById('farm-size').value;
+      var farmUnit = document.getElementById('farm-unit').value;
+      var farmPlots = document.getElementById('farm-plots').value || '1';
+      var farmCrop = document.getElementById('farm-crop').value;
+      var farmIrr = document.getElementById('farm-irrigation').value;
+      var farmType = document.getElementById('farm-type').value;
+
+      document.getElementById('rv-name').textContent = name;
+      document.getElementById('rv-phone').textContent = phone;
+      document.getElementById('rv-email').textContent = email;
+      document.getElementById('rv-lang').textContent = lang;
+      document.getElementById('rv-state').textContent = state;
+      document.getElementById('rv-district').textContent = district;
+      document.getElementById('rv-village').textContent = village;
+      document.getElementById('rv-aadhaar').textContent = aadhaarDisp;
+      document.getElementById('rv-verify-status').textContent = aadhaarVerified ? 'Verified' : 'Skipped';
+      document.getElementById('rv-verify-status').style.color = aadhaarVerified ? '#2e7d32' : '#e65100';
+      document.getElementById('rv-farm-name').textContent = farmName;
+      document.getElementById('rv-farm-loc').textContent = farmLoc;
+      document.getElementById('rv-farm-size').textContent = farmSize + ' ' + farmUnit;
+      document.getElementById('rv-farm-plots').textContent = farmPlots;
+      document.getElementById('rv-farm-crop').textContent = farmCrop;
+      document.getElementById('rv-farm-irr').textContent = farmIrr;
+      document.getElementById('rv-farm-type').textContent = farmType;
+
+      document.getElementById('preview-name').textContent = name;
+      document.getElementById('preview-farmer-id').textContent = 'ID: ' + generatedFarmerId;
+      document.getElementById('preview-crop').textContent = 'Crop: ' + farmCrop;
+      document.getElementById('preview-farm-id').textContent = 'Farm: ' + generatedFarmId;
+      document.getElementById('preview-state-footer').textContent = state;
+    }
+
+    /* ---------- Complete Registration ---------- */
+    function completeRegistration() {
+      var pin = getPin('pin-create');
+      var state = document.getElementById('reg-state').value;
+      var payload = {
+        fullName: document.getElementById('reg-name').value.trim(),
+        email: document.getElementById('reg-email').value.trim(),
+        phone: document.getElementById('reg-phone').value.trim(),
+        password: pin,
+        farmerId: generatedFarmerId,
+        role: 'farmer',
+        language: document.getElementById('reg-language').value,
+        state: state,
+        district: document.getElementById('reg-district').value.trim(),
+        village: document.getElementById('reg-village').value.trim(),
+        farmName: document.getElementById('farm-name').value.trim(),
+        farmSize: document.getElementById('farm-size').value + ' ' + document.getElementById('farm-unit').value,
+        primaryCrop: document.getElementById('farm-crop').value
+      };
+
+      var res = (window.UserStore) ? UserStore.register(payload) : { ok:false, error:'Store unavailable' };
+      if (!res.ok) {
+        showToast(res.error || 'Could not create account.', 'danger');
+        return;
+      }
+
+      UserStore.setSession(res.user);
+
+      var farmId = res.user.farms && res.user.farms[0] ? res.user.farms[0].id : generatedFarmId;
+      localStorage.setItem('fa-user-pin', pin);
+      localStorage.setItem('app-language', payload.language);
+      localStorage.setItem('user-session-mode', 'pin');
+      localStorage.setItem('onboarding_complete', 'true');
+      localStorage.setItem('farm-streak', '1');
+      localStorage.setItem('fa-farmer-id', generatedFarmerId);
+      localStorage.setItem('fa-farm-id', generatedFarmId);
+      try { localStorage.removeItem('form-draft-signup.html'); } catch(e){}
+
+      document.getElementById('gen-farmer-id').textContent = generatedFarmerId;
+      document.getElementById('gen-farm-id').textContent = generatedFarmId;
+      document.getElementById('success-overlay').classList.add('show');
+
+      setTimeout(function() {
+        window.location.href = 'index.html';
+      }, 2500);
+    }
+
+    if (typeof FarmDB !== 'undefined' && FarmDB.app && FarmDB.app.init) { FarmDB.app.init(); }
+  </script>
+</body>
+</html>

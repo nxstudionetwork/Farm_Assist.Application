@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - Marketplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<main class="page-container">
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a> <span class="bc-sep">/</span>
+    <span class="bc-current">Marketplace</span>
+  </nav>
+
+  <!-- Page Header & Quick Actions -->
+  <div class="page-action-bar" role="toolbar" aria-label="Marketplace quick actions">
+    <span class="pab-title">Marketplace</span>
+    <button class="pab-btn primary" onclick="showToast('Opening sell crop form...','info')"><i class="fas fa-tag"></i> Sell Crop</button>
+    <button class="pab-btn" onclick="showToast('Browsing farm inputs...','info')"><i class="fas fa-basket-shopping"></i> Buy Inputs</button>
+    <button class="pab-btn" onclick="window.location.href='bookmarks.html'"><i class="fas fa-heart"></i> Wishlist</button>
+    <button class="pab-btn" onclick="showToast('Compare products view','info')"><i class="fas fa-scale-balanced"></i> Compare</button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="market-search">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Search seeds, fertilizers, tractor tools, livestock..." id="marketplace-search-input">
+  </div>
+
+  <!-- Category Chips -->
+  <div class="category-slider">
+    <button class="category-chip active" data-filter="all">All</button>
+    <button class="category-chip" data-filter="seeds">Seeds</button>
+    <button class="category-chip" data-filter="fertilizers">Fertilizers</button>
+    <button class="category-chip" data-filter="pesticides">Pesticides</button>
+    <button class="category-chip" data-filter="equipment">Equipment</button>
+    <button class="category-chip" data-filter="livestock">Livestock</button>
+    <button class="category-chip" data-filter="rentals">Rentals</button>
+  </div>
+
+  <!-- Cart Badge -->
+  <div class="market-cart-badge" id="marketplace-cart-badge" style="display:none;">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-count" id="cart-count">0</span>
+  </div>
+
+  <!-- Product Grid -->
+  <section class="card-premium" style="padding:15px 10px;">
+    <h3 style="font-size:16px; margin-left:10px; margin-bottom:15px;"><i class="fas fa-store-alt" style="color:var(--premium-green); margin-right:8px;"></i> Catalog Products</h3>
+    <div id="marketplace-grid" class="products-grid">
+      <!-- Loaded via JS -->
+    </div>
+  </section>
+
+  <!-- Order Tracking -->
+  <section class="card-premium">
+    <h2 style="font-size:18px; margin-bottom:15px;"><i class="fas fa-shipping-fast" style="color:var(--premium-green); margin-right:8px;"></i> Order Tracking</h2>
+
+    <div class="alert-strip info" style="border-left-color: var(--premium-green);">
+      <div class="alert-content">
+        <i class="fas fa-truck-loading" style="color:var(--premium-green); margin-right:8px;"></i>
+        <div>
+          <strong>1x Organic Nitrogen Fertilizer (10kg)</strong>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Status: Out for Delivery &bull; ETA: Today, 5:00 PM</div>
+        </div>
+      </div>
+      <span class="alert-time">Active</span>
+    </div>
+
+    <div class="alert-strip warning" style="border-left-color: var(--warning);">
+      <div class="alert-content">
+        <i class="fas fa-check-circle" style="color:var(--warning); margin-right:8px;"></i>
+        <div>
+          <strong>2x Smart Bluetooth Soil Probes</strong>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Status: Order Packed &bull; Ship confirmation pending</div>
+        </div>
+      </div>
+      <span class="alert-time">Pending</span>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/database.js"></script>
+<script src="js/services.js"></script>
+<script src="js/userStore.js"></script>
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

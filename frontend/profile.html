@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profile - Farm Assist</title>
+  <meta name="description" content="Manage your Farm Assist profile, settings, and preferences.">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B3D2E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .profile-header-card { background: white; border-radius: var(--radius-lg); padding: 28px 24px; text-align: center; margin-bottom: 20px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+    .profile-avatar-wrap { position: relative; width: 100px; height: 100px; margin: 0 auto 16px; cursor: pointer; }
+    .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-green), var(--light-green)); display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; font-weight: 700; border: 3px solid white; box-shadow: var(--shadow-md); overflow: hidden; }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-camera-btn { position: absolute; bottom: 0; right: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--primary-green); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; border: 2px solid white; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
+    .profile-camera-btn:hover { transform: scale(1.1); }
+    .profile-name { font-size: 20px; font-weight: 700; }
+    .profile-location { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .profile-plan-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; background: rgba(27,94,63,0.1); color: var(--primary-green); margin: 8px 0; }
+    .profile-stats { display: flex; gap: 2px; margin-top: 16px; }
+    .profile-stat-box { flex: 1; padding: 12px 4px; background: var(--bg-card-soft); border-radius: var(--radius-sm); text-align: center; }
+    .profile-stat-num { font-size: 20px; font-weight: 800; color: var(--primary-green); }
+    .profile-stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .profile-section { margin-bottom: 20px; }
+    .profile-section-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 0 4px; }
+    .profile-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: white; border: 1px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: 6px; cursor: pointer; transition: all 0.15s; text-decoration: none; color: inherit; }
+    .profile-row:hover { border-color: var(--medium-green); background: var(--bg-card-soft); }
+    .profile-row-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; background: rgba(27,94,63,0.08); color: var(--primary-green); flex-shrink: 0; }
+    .profile-row-content { flex: 1; }
+    .profile-row-label { font-size: 13px; font-weight: 600; }
+    .profile-row-sub { font-size: 11px; color: var(--text-muted); }
+    .profile-row-arrow { color: var(--text-muted); font-size: 12px; }
+    .profile-row-icon.danger { background: rgba(244,67,54,0.08); color: var(--danger); }
+    .profile-row-label.danger { color: var(--danger); }
+    .toggle-switch { width: 44px; height: 24px; border-radius: 12px; background: var(--border-light); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .toggle-switch.active { background: var(--primary-green); }
+    .toggle-switch::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .toggle-switch.active::after { transform: translateX(20px); }
+    .logout-btn { width: 100%; padding: 14px; border-radius: var(--radius-md); border: none; background: var(--danger); color: white; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: opacity 0.2s; }
+    .logout-btn:hover { opacity: 0.9; }
+    .profile-version { text-align: center; font-size: 11px; color: var(--text-muted); padding: 20px 0; }
+  </style>
+</head>
+<body>
+
+<main class="page-container">
+
+  <!-- Profile Header Card -->
+  <div class="profile-header-card">
+    <div class="profile-avatar-wrap" id="avatar-upload-trigger">
+      <div class="profile-avatar" id="profile-avatar-display">
+        <i class="fas fa-user" id="avatar-icon"></i>
+        <img id="avatar-img" style="display:none;" alt="Profile Photo">
+      </div>
+      <div class="profile-camera-btn"><i class="fas fa-camera"></i></div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none;">
+    </div>
+    <div class="profile-name" id="display-name">Farmer</div>
+    <div class="profile-location" id="display-location"><i class="fas fa-map-marker-alt"></i> Your Village, District</div>
+    <div class="profile-plan-badge">Free Plan</div>
+    <div class="profile-stats">
+      <div class="profile-stat-box">
+        <div class="profile-stat-num">2</div>
+        <div class="profile-stat-label">Farms</div>
+      </div>
+      <div class="profile-stat-box">
+        <div class="profile-stat-num">12</div>
+        <div class="profile-stat-label">Acres</div>
+      </div>
+      <div class="profile-stat-box">
+        <div class="profile-stat-num">3</div>
+        <div class="profile-stat-label">Workers</div>
+      </div>
+      <div class="profile-stat-box">
+        <div class="profile-stat-num">28</div>
+        <div class="profile-stat-label">Tasks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Settings -->
+  <div class="profile-section">
+    <div class="profile-section-title">Account Settings</div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Opening profile editor...', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-pen"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Edit Profile</div>
+        <div class="profile-row-sub">Name, location, farm details</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" id="change-photo-row">
+      <div class="profile-row-icon"><i class="fas fa-camera"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Change Photo</div>
+        <div class="profile-row-sub">Upload a profile picture</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-id-card"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Farm ID</div>
+        <div class="profile-row-sub" id="display-farm-id">FA-00000</div>
+      </div>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-crown"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Account Type</div>
+        <div class="profile-row-sub">Free Plan</div>
+      </div>
+      <span style="font-size:11px; color:var(--primary-green); font-weight:600;">Upgrade</span>
+    </div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Language selector coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-language"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Language</div>
+        <div class="profile-row-sub">Hindi (हिंदी)</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+  </div>
+
+  <!-- Notification Settings -->
+  <div class="profile-section">
+    <div class="profile-section-title">Notification Settings</div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-bell"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Push Notifications</div>
+      </div>
+      <div class="toggle-switch active" data-setting="push-notifications" onclick="toggleSwitch(this)"></div>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-envelope"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Email Notifications</div>
+      </div>
+      <div class="toggle-switch" data-setting="email-notifications" onclick="toggleSwitch(this)"></div>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-sms"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">SMS Alerts</div>
+      </div>
+      <div class="toggle-switch active" data-setting="sms-alerts" onclick="toggleSwitch(this)"></div>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Weather Alerts</div>
+      </div>
+      <div class="toggle-switch active" data-setting="weather-alerts" onclick="toggleSwitch(this)"></div>
+    </div>
+  </div>
+
+  <!-- Privacy & Security -->
+  <div class="profile-section">
+    <div class="profile-section-title">Privacy & Security</div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Change password feature coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-lock"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Change Password</div>
+        <div class="profile-row-sub">Update your password</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Two-factor auth coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-shield-halved"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Two-Factor Authentication</div>
+        <div class="profile-row-sub">Not enabled</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Data export feature coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-download"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Data Export</div>
+        <div class="profile-row-sub">Download your farm data</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" onclick="confirmDelete()">
+      <div class="profile-row-icon danger"><i class="fas fa-trash"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label danger">Delete Account</div>
+        <div class="profile-row-sub">Permanently remove all data</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+  </div>
+
+  <!-- Help & Support -->
+  <div class="profile-section">
+    <div class="profile-section-title">Help & Support</div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Help center coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-circle-question"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Help Center</div>
+        <div class="profile-row-sub">FAQs and guides</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Contact support coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-headset"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Contact Support</div>
+        <div class="profile-row-sub">Chat with our team</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" onclick="FarmApp.toast.show('Bug report feature coming soon', 'info')">
+      <div class="profile-row-icon"><i class="fas fa-bug"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">Report a Bug</div>
+        <div class="profile-row-sub">Help us improve</div>
+      </div>
+      <i class="fas fa-chevron-right profile-row-arrow"></i>
+    </div>
+    <div class="profile-row" style="cursor:default;">
+      <div class="profile-row-icon"><i class="fas fa-info-circle"></i></div>
+      <div class="profile-row-content">
+        <div class="profile-row-label">App Version</div>
+        <div class="profile-row-sub">v2.4.1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Button -->
+  <button class="logout-btn" onclick="confirmLogout()">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+
+  <div class="profile-version">Farm Assist v2.4.1 - Built for Indian Farmers</div>
+
+</main>
+
+<script src="js/database.js"></script>
+<script src="js/services.js"></script>
+<script src="js/userStore.js"></script>
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="js/script.js"></script>
+<script>
+  (function() {
+    // Load saved profile photo from localStorage
+    var savedPhoto = localStorage.getItem('user-profile-photo');
+    var avatarImg = document.getElementById('avatar-img');
+    var avatarIcon = document.getElementById('avatar-icon');
+
+    if (savedPhoto) {
+      avatarImg.src = savedPhoto;
+      avatarImg.style.display = 'block';
+      avatarIcon.style.display = 'none';
+    }
+
+    // Load user info
+    var userName = localStorage.getItem('fa-user-name') || 'Farmer';
+    var userLocation = localStorage.getItem('fa-user-location') || 'Your Village, District';
+    var farmId = localStorage.getItem('fa-user-farm-id') || 'FA-00000';
+
+    document.getElementById('display-name').textContent = userName;
+    document.getElementById('display-location').innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + userLocation;
+    document.getElementById('display-farm-id').textContent = farmId;
+
+    // Load toggle states
+    document.querySelectorAll('.toggle-switch').forEach(function(toggle) {
+      var setting = toggle.getAttribute('data-setting');
+      var saved = localStorage.getItem('fa-toggle-' + setting);
+      if (saved === 'false') {
+        toggle.classList.remove('active');
+      } else if (saved === 'true') {
+        toggle.classList.add('active');
+      }
+    });
+  })();
+
+  function toggleSwitch(el) {
+    el.classList.toggle('active');
+    var setting = el.getAttribute('data-setting');
+    var isActive = el.classList.contains('active');
+    localStorage.setItem('fa-toggle-' + setting, isActive);
+    FarmApp.toast.show(isActive ? 'Enabled' : 'Disabled', 'success');
+  }
+
+  function confirmDelete() {
+    FarmApp.confirm.show({
+      icon: 'fas fa-exclamation-triangle',
+      title: 'Delete Account?',
+      message: 'This will permanently delete all your farm data, records, and account. This action cannot be undone.',
+      onConfirm: function() {
+        localStorage.clear();
+        FarmApp.toast.show('Account deleted', 'info');
+        setTimeout(function() { window.location.href = 'login.html'; }, 1000);
+      }
+    });
+  }
+
+  function confirmLogout() {
+    FarmApp.confirm.show({
+      icon: 'fas fa-sign-out-alt',
+      title: 'Logout?',
+      message: 'Are you sure you want to logout from Farm Assist?',
+      onConfirm: function() {
+        localStorage.removeItem('user-logged-in');
+        FarmApp.toast.show('Logged out successfully', 'success');
+        setTimeout(function() { window.location.href = 'login.html'; }, 1000);
+      }
+    });
+  }
+
+  // Photo upload handler
+  var photoInput = document.getElementById('photo-input');
+  var avatarTrigger = document.getElementById('avatar-upload-trigger');
+  var changePhotoRow = document.getElementById('change-photo-row');
+
+  function triggerPhotoUpload() {
+    photoInput.click();
+  }
+
+  avatarTrigger.addEventListener('click', triggerPhotoUpload);
+  changePhotoRow.addEventListener('click', triggerPhotoUpload);
+
+  photoInput.addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      FarmApp.toast.show('Image must be under 5MB', 'error');
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var dataUrl = ev.target.result;
+      localStorage.setItem('user-profile-photo', dataUrl);
+
+      var avatarImg = document.getElementById('avatar-img');
+      var avatarIcon = document.getElementById('avatar-icon');
+      avatarImg.src = dataUrl;
+      avatarImg.style.display = 'block';
+      avatarIcon.style.display = 'none';
+
+      // Update header avatar in navigation
+      var headerAvatar = document.querySelector('.user-avatar-sm');
+      if (headerAvatar) {
+        var headerImg = headerAvatar.querySelector('img');
+        if (!headerImg) {
+          headerImg = document.createElement('img');
+          headerAvatar.innerHTML = '';
+          headerAvatar.appendChild(headerImg);
+        }
+        headerImg.src = dataUrl;
+        headerImg.style.cssText = 'width:100%; height:100%; border-radius:50%; object-fit:cover;';
+      }
+
+      FarmApp.toast.show('Profile photo updated', 'success');
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+</body>
+</html>

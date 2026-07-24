@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farm Assist - AI Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">AI Recommendations</span>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <h1><i class="fas fa-robot" style="color:var(--premium-green); margin-right:8px;"></i> AI Assistant</h1>
+      <p style="font-size:13px; color:var(--text-secondary);">Ask about crop diseases, nitrogen ratios, weather forecasts, or market rates.</p>
+    </section>
+
+    <!-- AI Voice Assistant Hero -->
+    <section class="ai-hero">
+      <div class="ai-avatar-glow">
+        <i class="fas fa-robot"></i>
+      </div>
+      <h2 style="color:var(--white); font-size:22px; margin-bottom:8px;">Hello Farmer, How can I help today?</h2>
+      <p style="color:rgba(255,255,255,0.75); font-size:13px; margin-bottom:15px;">Ask about crop diseases, nitrogen ratios, weather forecasts, or market rates.</p>
+
+      <div style="display:flex; justify-content:center; gap:16px; margin-top:10px;">
+        <button class="top-btn" style="width:48px; height:48px;" onclick="showToast('Camera diagnosis tool starting... Select a crop photo.','info')" aria-label="Camera Disease Detector"><i class="fas fa-camera"></i></button>
+        <button class="ai-mic-btn" id="chat-mic-btn" style="margin:0;" aria-label="Voice Activation Assistant"><i class="fas fa-microphone"></i></button>
+        <button class="top-btn" style="width:48px; height:48px;" onclick="document.getElementById('chat-input').focus();" aria-label="Open Keyboard Chat"><i class="fas fa-keyboard"></i></button>
+      </div>
+    </section>
+
+    <!-- Chat Window Container -->
+    <section class="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-bubble ai">
+          Hello <span data-user="fullName">Farmer</span>! I am your AI Agronomist companion. How is the farm holding up today?
+        </div>
+        <div class="chat-bubble user">
+          Leaves turning yellow on my cotton crops.
+        </div>
+        <div class="chat-bubble ai">
+          Possible nitrogen deficiency detected. Recommended solution: Apply urea 20kg/acre or natural nitrogen compost boosters. Ensure moisture level remains above 55%.
+        </div>
+      </div>
+
+      <div class="chat-input-bar">
+        <input type="text" placeholder="Type agricultural queries..." id="chat-input">
+        <button id="chat-send-btn" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </section>
+
+    <!-- Suggested Queries -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-lightbulb" style="color:var(--premium-green); margin-right:8px;"></i> Suggested Queries</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <button class="btn-secondary" style="font-size:12px; padding:8px 14px; border-radius:20px;" onclick="document.getElementById('chat-input').value='What fertilizer is best for rice?';showToast('Query loaded','info')"><i class="fas fa-seedling" style="margin-right:4px;"></i> Best fertilizer for rice?</button>
+        <button class="btn-secondary" style="font-size:12px; padding:8px 14px; border-radius:20px;" onclick="document.getElementById('chat-input').value='Is it safe to sow wheat this week?';showToast('Query loaded','info')"><i class="fas fa-cloud-sun" style="margin-right:4px;"></i> Safe to sow wheat?</button>
+        <button class="btn-secondary" style="font-size:12px; padding:8px 14px; border-radius:20px;" onclick="document.getElementById('chat-input').value='Cotton leaf curl virus treatment';showToast('Query loaded','info')"><i class="fas fa-bug" style="margin-right:4px;"></i> Leaf curl virus cure?</button>
+        <button class="btn-secondary" style="font-size:12px; padding:8px 14px; border-radius:20px;" onclick="document.getElementById('chat-input').value='Current mandi prices for sugarcane';showToast('Query loaded','info')"><i class="fas fa-chart-line" style="margin-right:4px;"></i> Sugarcane market price</button>
+      </div>
+    </section>
+
+    <!-- AI Feature Cards -->
+    <section class="card-premium">
+      <h3 style="font-size:16px; margin-bottom:15px;"><i class="fas fa-magic" style="color:var(--premium-green); margin-right:8px;"></i> Smart Assistant Models</h3>
+
+      <div class="features-grid">
+        <div class="feature-card" onclick="showToast('Opening Crop Diagnosis...','info')">
+          <i class="fas fa-bug"></i>
+          <h4>Crop Diagnosis</h4>
+          <p>Scan crop images</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Pest Detection...','info')">
+          <i class="fas fa-spider"></i>
+          <h4>Pest Detection</h4>
+          <p>Bollworm predictions</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Yield Prediction...','info')">
+          <i class="fas fa-chart-line"></i>
+          <h4>Yield Prediction</h4>
+          <p>Calculate crop output</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Crop Recommendation...','info')">
+          <i class="fas fa-seedling"></i>
+          <h4>Crop Recommendation</h4>
+          <p>Soil-matched grains</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Weather Advisory...','info')">
+          <i class="fas fa-cloud-sun-rain"></i>
+          <h4>Weather Advisory</h4>
+          <p>Optimal sowing dates</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Market Insights...','info')">
+          <i class="fas fa-store"></i>
+          <h4>Market Insights</h4>
+          <p>Rate forecasts</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Soil Analysis...','info')">
+          <i class="fas fa-flask"></i>
+          <h4>Soil Analysis</h4>
+          <p>Acidity & NPK advice</p>
+        </div>
+        <div class="feature-card" onclick="showToast('Opening Problem Solver...','info')">
+          <i class="fas fa-question-circle"></i>
+          <h4>Problem Solver</h4>
+          <p>General farm troubleshooting</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

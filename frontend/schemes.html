@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>Farm Assist - Government Schemes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="page-container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span class="bc-sep">/</span>
+      <span class="bc-current">Government Schemes</span>
+    </nav>
+    <div class="page-header">
+      <div>
+        <h1>Government Schemes</h1>
+        <p>Subsidies, loans, insurance & eligibility checker</p>
+      </div>
+      <button class="btn-primary btn-sm" onclick="showToast('Check your eligibility for all schemes instantly!','success')">
+        <i class="fas fa-check-circle"></i> Check Eligibility
+      </button>
+    </div>
+
+    <div style="position:relative;margin-bottom:16px;">
+      <input type="text" class="search-input" id="scheme-search" placeholder="Search schemes by name, benefit, or category..." oninput="filterSchemes()" style="padding-left:40px;">
+      <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);"></i>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="showSchemeTab('all',this)">All</button>
+      <button class="filter-tab" onclick="showSchemeTab('central',this)">Central</button>
+      <button class="filter-tab" onclick="showSchemeTab('state',this)">State</button>
+      <button class="filter-tab" onclick="showSchemeTab('subsidy',this)">Subsidy</button>
+      <button class="filter-tab" onclick="showSchemeTab('insurance',this)">Insurance</button>
+      <button class="filter-tab" onclick="showSchemeTab('loan',this)">Loan</button>
+    </div>
+
+    <div id="schemes-content"></div>
+  </main>
+
+  <script src="js/database.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    function showSchemeTab(category, btn) {
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      if (typeof initGovSchemes === 'function') {
+        initGovSchemes('schemes-content');
+      }
+    }
+
+    function filterSchemes() {
+      var query = document.getElementById('scheme-search').value.toLowerCase();
+      var cards = document.querySelectorAll('#schemes-content .price-card, #schemes-content .card-premium');
+      cards.forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = text.indexOf(query) !== -1 ? '' : 'none';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() { showSchemeTab('all', document.querySelector('.filter-tab')); }, 200);
+    });
+  </script>
+</body>
+</html>
